@@ -39,7 +39,14 @@ const batchDelete = (ids) => {
 }
 
 // add score
-create({username: "testuser", password:"testpass", url:"testing.com"}).then((response) => 
+create({
+  object: {
+    username: "testuser",
+    password: "testpass",
+    url: "testing.com"
+  },
+  collection: "urls"
+}).then((response) =>
   console.log(response)
 )
 

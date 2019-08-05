@@ -5,6 +5,10 @@ const chalk = require('chalk')
 const insideNetlify = insideNetlifyBuildContext()
 const q = faunadb.query
 
+
+const _DATABASE_NAME = "NotifyDB"
+
+
 console.log(chalk.cyan('Creating your FaunaDB Database...\n'))
 
 // 1. Check for required enviroment variables
@@ -50,19 +54,13 @@ function createFaunaDB(key) {
   })
 
   /* Based on your requirements, change the schema here */
-  return client.query(q.Create(q.Ref('classes'), { name: 'urls' }))
-    .then(() => {
-      return client.query(
-        q.Create(q.Ref('indexes'), {
-          name: 'all_urls',
-          source: q.Ref('classes/urls')
-        }))
-    }).catch((e) => {
-      // Database already exists
-      if (e.requestResult.statusCode === 400 && e.message === 'instance not unique') {
-        console.log('DB already exists')
-        throw e
-      }
+  return client.query(q.CreateDatabase({ name: _DATABASE_NAME }))
+    .then((db) => { 
+      console.log(`bootstrap-fauna-database.js -- name:${db.name}, ref:${db.ref}, time:${db.ts}`)
+    })
+    .catch((err) => {
+      if (err.message === 'instance not unique') console.log(`Database '${_DATABASE_NAME}' already exists, good to go`)
+      else console.log(`Error in creating database: ${err.name} ${err.statuscode} ${err.message}`)
     })
 }
 
@@ -82,8 +80,8 @@ function ask(question, callback) {
     input: process.stdin,
     output: process.stdout
   })
-  rl.question(question + '\n', function(answer) {
+  rl.question(question + '\n', function (answer) {
     rl.close()
     callback(null, answer)
   })
-}
+} 
