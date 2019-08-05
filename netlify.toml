@@ -1,0 +1,6 @@
+[build]
+  functions = "functions-build"
+  command = "npm run build"
+
+[template.environment]
+  FAUNADB_SERVER_SECRET = "fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9"
