@@ -27,7 +27,7 @@ exports.handler = (event, context, callback) => {
   console.log('Function `add-url-to-db` invoked')
 
   // create a document in collection urls with data from the event
-  return client.query(q.Paginate(q.Match(q.Index("all_urls"), ["newtest", "newtest"])))
+  return client.query(q.Paginate(q.Match(q.Index("all_urls"), "newtest")))
   .then((result) => {console.log("--SUCCESS:" + JSON.stringify(result))})
   .catch((error) => {console.log("--ERROR:" + JSON.stringify(error))})
 }
