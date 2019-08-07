@@ -28,7 +28,6 @@ exports.handler = (event, context, callback) => {
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
-      console.log(`${urlRefs.length} urls found`)
       const refs = response.data
       console.log(`--${_COLLECTION_NAME}:`, refs)
       console.log(`--${refs.length} ${_COLLECTION_NAME} found`)
