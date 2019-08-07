@@ -13,7 +13,7 @@
 
 import faunadb from 'faunadb' // Import faunaDB sdk
 
-const _COLLECTION_NAME = "url"
+const _COLLECTION_NAME = "urls"
 
 // configure faunaDB Client with our secret
 const q = faunadb.query
