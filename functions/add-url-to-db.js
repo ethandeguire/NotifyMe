@@ -25,7 +25,7 @@ exports.handler = (event, context, callback) => {
   const body = JSON.parse(event.body)
 
   // tell the console:
-  console.log('Function `create` invoked')
+  console.log('Function `add-url-to-db` invoked')
 
   // create a document in collection urls with data from the event
   return client.query(q.Create(
