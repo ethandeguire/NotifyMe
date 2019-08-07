@@ -11,8 +11,6 @@
 //
 // ------ /Definitions -----
 
-console.log("SECRET:" + process.env.FAUNADB_SERVER_SECRET)
-
 import faunadb from 'faunadb' // Import faunaDB sdk
 
 // configure faunaDB Client with our secret
@@ -27,7 +25,7 @@ exports.handler = (event, context, callback) => {
   const body = JSON.parse(event.body)
 
   // tell the console:
-  console.log('Function `create` invoked', object)
+  console.log('Function `create` invoked')
 
   // create a document in collection urls with data from the event
   return client.query(q.Create(
