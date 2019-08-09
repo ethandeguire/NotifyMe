@@ -28,6 +28,6 @@ exports.handler = (event, context, callback) => {
 
   // create a document in collection urls with data from the event
   return client.query(q.Paginate(q.Match(q.Index("all_urls"), "newtest")))
-  .then((result) => {console.log("--SUCCESS:" + JSON.stringify(result))})
-  .catch((error) => {console.log("--ERROR:" + JSON.stringify(error))})
+  .then((result) => {console.log("--SUCCESS:" + result)})
+  .catch((error) => {console.log("--ERROR:" + error)})
 }

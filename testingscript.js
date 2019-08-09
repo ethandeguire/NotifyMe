@@ -38,18 +38,6 @@ const batchDelete = (ids) => {
   })
 }
 
-// add score
-create({
-  object: {
-    username: "testuser",
-    password: "testpass",
-    url: "testing.com"
-  },
-  collection: "urls"
-}).then((response) =>
-  console.log(response)
-)
-
 // read scores
 readAll().then((scores) =>
   console.log(scores)
