@@ -46,11 +46,10 @@ exports.handler = (event, context, callback) => {
 
         // find the 
         objects.forEach(obj => {
-          let objBody = obj.data
-          console.log("objBody: ", objBody)
-          console.log("usernames, pws: ", body.data.username, objBody.username, body.data.password, objBody.password)
-          if (body.data.username == objBody.username && body.data.password == objBody.password){
-            return client.query(objBody["@ref"]["id"])
+          console.log("objBody: ", obj.data)
+          console.log("usernames, pws: ", body.data.username, obj.data.username, body.data.password, obj.data.password)
+          if (body.data.username == obj.data.username && body.data.password == obj.data.password){
+            return client.query(obj["@ref"]["id"])
               .then ((returnVal) => console.log("--Update return statement: " + returnVal))
               .catch((error) => console.log("--Error in Update: " + error))
           }
