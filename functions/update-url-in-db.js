@@ -12,6 +12,7 @@
 // ------ /Definitions -----
 
 import faunadb from 'faunadb' // Import faunaDB sdk
+const fetch = require('node-fetch');
 
 const _COLLECTION_NAME = "urls"
 
