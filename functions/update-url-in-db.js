@@ -32,8 +32,6 @@ exports.handler = (event, context, callback) => {
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
       const refs = response.data
-      // console.log(`--${_COLLECTION_NAME}:`, refs)
-      console.log(`--${refs.length} ${_COLLECTION_NAME} found`)
 
       // create new query out of refs
       const getAllDataQuery = refs.map((ref) => {
@@ -43,24 +41,35 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery)
         .then((objects) => {
-          console.log("--Got all objects, looping through to find matching")
-
           for (let i = 0; i < refs.length; i++) {
             let obj = objects[i]
-            console.log("--usernames, pws: ", body.data.username, obj.data.username, body.data.password, obj.data.password)
-            if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
-              console.log("--update object: \n", obj)
-              console.log("--object reference:", refs[i])
 
+            // if username and password are correct
+            if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
               return client.query(q.Update(refs[i], { data: { url: body.data.url } }))
                 .then((returnVal) => {
-                  console.log("--Update return statement: " + returnVal)
+                  console.log("--Updated url of user:", body.data.username)
                   return callback(null, {
                     statusCode: 200,
                     body: JSON.stringify(returnVal)
                   })
                 })
-                .catch((error) => console.log("--Error in Update: " + error))
+                .catch((error) => {
+                  console.log('--error', error)
+                  return callback(null, {
+                    statusCode: 400,
+                    body: JSON.stringify(error)
+                  })
+                })
+            }
+
+            // if password is incorrect
+            else if (body.data.username == obj.data.username && body.data.password != obj.data.password){
+              console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
+              return callback(null, {
+                statusCode: 400,
+                body: `Bad password for user: ${body.data.username}`
+              })
             }
           }
         })
