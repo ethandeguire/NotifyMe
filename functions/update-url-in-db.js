@@ -32,7 +32,7 @@ exports.handler = (event, context, callback) => {
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
       const refs = response.data
-      console.log(`--${_COLLECTION_NAME}:`, refs)
+      // console.log(`--${_COLLECTION_NAME}:`, refs)
       console.log(`--${refs.length} ${_COLLECTION_NAME} found`)
 
       // create new query out of refs
@@ -41,9 +41,9 @@ exports.handler = (event, context, callback) => {
       })
 
       // then query the refs
-      return client.query(getAllDataQuery).then((jsonArray) => {
-        
-        let objects = JSON.parse(jsonArray)
+      return client.query(getAllDataQuery).then((objects) => {
+        console.log("objects: ", typeof(objects), objects)
+        // let objects = JSON.parse(jsonArray)
         console.log("--Got all objects, looping through to find matching")
 
         // find the 
