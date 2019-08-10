@@ -27,7 +27,7 @@ exports.handler = (event, context, callback) => {
   let body = JSON.parse(event)
 
   // tell the console:
-  console.log(`--Function 'get-all-${_COLLECTION_NAME}' invoked`)
+  console.log(`--Function 'update-${_COLLECTION_NAME}-in-db' invoked`)
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
