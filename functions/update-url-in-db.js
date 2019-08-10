@@ -41,8 +41,14 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery)
         .then((objects) => {
+
+          let usernameExists = false
+
           for (let i = 0; i < refs.length; i++) {
             let obj = objects[i]
+
+            // If this, then username exists, not new user
+            if (body.data.username == obj.data.username) usernameExists = true
 
             // if username and password are correct
             if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
@@ -72,6 +78,18 @@ exports.handler = (event, context, callback) => {
               })
             }
           }
+
+          if (!usernameExists){
+            console.log(`Username does not exists, creating a new account for ${body.data.username}`)
+            return fetch('/.netlify/functions/create', {
+              body: JSON.stringify(data),
+              method: 'POST'
+            }).then(response => {
+              console.log(response)
+              return JSON.stringify(response)
+            })
+          }
+
         })
         .catch((error) => {
           console.log('--error', error)

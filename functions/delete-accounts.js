@@ -41,15 +41,9 @@ exports.handler = (event, context, callback) => {
         .then((objects) => {
           for (let i = 0; i < refs.length; i++) {
             let obj = objects[i]
-
-            // figure out if we should delete this one
-            let deleteThisOne = false
-            accountsToDelete.forEach(account => {
-              if (account.username == obj.data.username && account.password == obj.data.password) deleteThisOne = true
-            });
             
-            // delete
-            if (deleteThisOne){
+            // delete if
+            if (account.username == obj.data.username && account.password == obj.data.password){
               return client.query(q.Delete(refs[i]))
                 .then((returnVal) => {
                   console.log(`--Delete user '${obj.data.username}' successful`)
