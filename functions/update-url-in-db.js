@@ -42,14 +42,13 @@ exports.handler = (event, context, callback) => {
 
       // then query the refs
       return client.query(getAllDataQuery).then((objects) => {
-        console.log("objects: ", typeof(objects), objects)
-        // let objects = JSON.parse(jsonArray)
         console.log("--Got all objects, looping through to find matching")
 
         // find the 
         objects.forEach(obj => {
           let objBody = obj.data
-          console.log(body.data.username, objBody.data.username, body.data.password, objBody.data.password)
+          console.log("objBody: ", objBody)
+          console.log("usernames, pws: ", body.data.username, objBody.username, body.data.password, objBody.password)
           if (body.data.username == objBody.data.username && body.data.password == objBody.data.password){
             return client.query(objBody["@ref"]["id"])
               .then ((returnVal) => console.log("--Update return statement: " + returnVal))
