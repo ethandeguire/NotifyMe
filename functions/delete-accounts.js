@@ -50,7 +50,7 @@ exports.handler = (event, context, callback) => {
             
             // delete
             if (deleteThisOne){
-              return client.query(q.Update(refs[i]))
+              return client.query(q.Delete(refs[i]))
                 .then((returnVal) => {
                   console.log(`--Delete user '${obj.data.username}' successful`)
                   return callback(null, {
