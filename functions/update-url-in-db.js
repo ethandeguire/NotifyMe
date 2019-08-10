@@ -41,34 +41,38 @@ exports.handler = (event, context, callback) => {
       })
 
       // then query the refs
-      return client.query(getAllDataQuery).then((objects) => {
-        console.log("--Got all objects, looping through to find matching")
+      return client.query(getAllDataQuery)
+        .then((objects) => {
+          console.log("--Got all objects, looping through to find matching")
 
-        // find the 
-        objects.forEach(obj => {
-          console.log("--usernames, pws: ", body.data.username, obj.data.username, body.data.password, obj.data.password)
-          if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
-            console.log("--update object: \n", obj["ref"])
-            return client.query(obj["ref"]["@ref"]["id"])
-              .then((returnVal) => {
-                console.log("--Update return statement: " + returnVal)
-                return callback(null, {
-                  statusCode: 200,
-                  body: JSON.stringify(returnVal)
+          for (let i = 0; i < refs.length; i++) {
+            let obj = objects[i]
+            console.log("--usernames, pws: ", body.data.username, obj.data.username, body.data.password, obj.data.password)
+            if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
+              console.log("--update object: \n", obj)
+              console.log("--object reference:", refs[i])
+
+              return client.query(q.Update(refs[i], { data: { url: body.data.url } }))
+                .then((returnVal) => {
+                  console.log("--Update return statement: " + returnVal)
+                  return callback(null, {
+                    statusCode: 200,
+                    body: JSON.stringify(returnVal)
+                  })
                 })
-              }
-              )
-              .catch((error) => console.log("--Error in Update: " + error))
+                .catch((error) => console.log("--Error in Update: " + error))
+            }
           }
-        });
-
-        // return callback(null, {
-        //   statusCode: 200,
-        //   body: JSON.stringify(ret)
-        // })
-
-      })
-    }).catch((error) => {
+        })
+        .catch((error) => {
+          console.log('--error', error)
+          return callback(null, {
+            statusCode: 400,
+            body: JSON.stringify(error)
+          })
+        })
+    })
+    .catch((error) => {
       console.log('--error', error)
       return callback(null, {
         statusCode: 400,
