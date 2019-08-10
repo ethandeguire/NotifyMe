@@ -83,7 +83,7 @@ exports.handler = (event, context, callback) => {
           if (!usernameExists){
             console.log(`Username does not exists, creating a new account for ${body.data.username}`)
             return fetch('/.netlify/functions/create', {
-              body: JSON.stringify(data),
+              body: JSON.stringify(body),
               method: 'POST'
             }).then(response => {
               console.log(response)
