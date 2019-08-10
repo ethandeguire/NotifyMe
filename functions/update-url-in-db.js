@@ -47,10 +47,17 @@ exports.handler = (event, context, callback) => {
         // find the 
         objects.forEach(obj => {
           console.log("--usernames, pws: ", body.data.username, obj.data.username, body.data.password, obj.data.password)
-          if (body.data.username == obj.data.username && body.data.password == obj.data.password){
-            console.log("--update object: ", obj)
+          if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
+            console.log("--update object: \n", obj["ref"])
             return client.query(obj["ref"]["@ref"]["id"])
-              .then ((returnVal) => console.log("--Update return statement: " + returnVal))
+              .then((returnVal) => {
+                console.log("--Update return statement: " + returnVal)
+                return callback(null, {
+                  statusCode: 200,
+                  body: JSON.stringify(returnVal)
+                })
+              }
+              )
               .catch((error) => console.log("--Error in Update: " + error))
           }
         });
