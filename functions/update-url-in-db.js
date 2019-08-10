@@ -49,9 +49,10 @@ exports.handler = (event, context, callback) => {
           let objBody = obj.data
           console.log("objBody: ", objBody)
           console.log("usernames, pws: ", body.data.username, objBody.username, body.data.password, objBody.password)
-          if (body.data.username == objBody.data.username && body.data.password == objBody.data.password){
+          if (body.data.username == objBody.username && body.data.password == objBody.password){
             return client.query(objBody["@ref"]["id"])
               .then ((returnVal) => console.log("--Update return statement: " + returnVal))
+              .catch((error) => console.log("--Error in Update: " + error))
           }
         });
 
