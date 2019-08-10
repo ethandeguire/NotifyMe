@@ -44,7 +44,7 @@ exports.handler = (event, context, callback) => {
 
             // figure out if we should delete this one
             let deleteThisOne = false
-            accounts.forEach(account => {
+            accountsToDelete.forEach(account => {
               if (account.username == obj.data.username && account.password == obj.data.password) deleteThisOne = true
             });
             
