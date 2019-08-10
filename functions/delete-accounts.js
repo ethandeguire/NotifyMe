@@ -2,11 +2,9 @@
 //
 // JSON Input Data:
 //  {
-//    "data":{
-//      "{USERNAME}",
-//      "{PASSWORD}",
-//      "{URL}"
-//    }
+//    "accounts":[
+//      {username: "example", password: "example"}
+//    ]
 //  }
 //
 // ------ /Definitions -----
@@ -24,10 +22,10 @@ const client = new faunadb.Client({
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
 
-  let body = JSON.parse(event.body)
+  let accountsToDelete = JSON.parse(event.body).accounts
 
   // tell the console:
-  console.log(`--Function 'update-${_COLLECTION_NAME}-in-db' invoked`)
+  console.log(`--Function 'delete-accounts' invoked`)
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
@@ -44,32 +42,29 @@ exports.handler = (event, context, callback) => {
           for (let i = 0; i < refs.length; i++) {
             let obj = objects[i]
 
-            // if username and password are correct
-            if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
-              return client.query(q.Update(refs[i], { data: { url: body.data.url } }))
+            // figure out if we should delete this one
+            let deleteThisOne = false
+            accounts.forEach(account => {
+              if (account.username == obj.data.username && account.password == obj.data.password) deleteThisOne = true
+            });
+            
+            // delete
+            if (deleteThisOne){
+              return client.query(q.Update(refs[i]))
                 .then((returnVal) => {
-                  console.log(`--Updated url of user: ${body.data.username} to ${body.data.url}`)
+                  console.log(`--Delete user '${obj.data.username}' successful`)
                   return callback(null, {
                     statusCode: 200,
                     body: JSON.stringify(returnVal)
                   })
                 })
                 .catch((error) => {
-                  console.log('--error', error)
+                  console.log(`--error in deleting user '${obj.data.username}', error: ${error}`)
                   return callback(null, {
                     statusCode: 400,
                     body: JSON.stringify(error)
                   })
                 })
-            }
-
-            // if password is incorrect
-            else if (body.data.username == obj.data.username && body.data.password != obj.data.password){
-              console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
-              return callback(null, {
-                statusCode: 400,
-                body: `Bad password for user: ${body.data.username}`
-              })
             }
           }
         })
