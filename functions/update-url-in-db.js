@@ -24,7 +24,7 @@ const client = new faunadb.Client({
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
 
-  let body = JSON.parse(event)
+  let body = JSON.parse(event.body)
 
   // tell the console:
   console.log(`--Function 'update-${_COLLECTION_NAME}-in-db' invoked`)
