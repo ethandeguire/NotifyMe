@@ -55,23 +55,18 @@ exports.handler = (event, context, callback) => {
             // delete if we should delete this one
             if (deleteThisOne){
               results.push(client.query(q.Delete(refs[i]))
-                .then((returnVal) => {
+                .then((ret) => {
                   console.log(`--Delete user '${obj.data.username}' successful`)
-                  return returnVal
+                  return `--Delete user '${obj.data.username}' successful`
 
                 })
                 .catch((error) => {
                   console.log(`--error in deleting user '${obj.data.username}', error: ${error}`)
-                  return error
+                  return `--error in deleting user '${obj.data.username}', error: ${error}`
                 })
               )
             }
           }
-
-          console.log("--")
-          console.log("--")
-          console.log("results final:\n", results)
-
           return callback(null, {
             statusCode: 200,
             body: JSON.stringify(results)
