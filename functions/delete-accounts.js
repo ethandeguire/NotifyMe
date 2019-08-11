@@ -25,7 +25,7 @@ exports.handler = (event, context, callback) => {
   let accountsToDelete = JSON.parse(event.body).accounts
 
   // tell the console:
-  console.log(`--Function 'delete-accounts' invoked, deleting ${accountsToDelete.length}`)
+  console.log(`--Function 'delete-accounts' invoked`)
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
@@ -38,23 +38,22 @@ exports.handler = (event, context, callback) => {
 
       // then query the refs
       return client.query(getAllDataQuery)
-        .then((userAccountObjects) => {
+        .then((objects) => {
           for (let i = 0; i < refs.length; i++) {
-            let userAccountData = userAccountObjects[i]
+            let obj = objects[i]
 
             accountsToDelete.forEach(account => {
-              console.log(account.username, userAccountData.username, account.password, userAccountData.password)
-              if (account.username == userAccountData.username && account.password == userAccountData.password) {
+              if (account.username == obj.data.username && account.password == obj.data.password) {
                 return client.query(q.Delete(refs[i]))
                   .then((returnVal) => {
-                    console.log(`--Delete user '${userAccountData.username}' successful`)
+                    console.log(`--Delete user '${obj.data.username}' successful`)
                     return callback(null, {
                       statusCode: 200,
                       body: JSON.stringify(returnVal)
                     })
                   })
                   .catch((error) => {
-                    console.log(`--error in deleting user '${userAccountData.username}', error: ${error}`)
+                    console.log(`--error in deleting user '${obj.data.username}', error: ${error}`)
                     return callback(null, {
                       statusCode: 400,
                       body: JSON.stringify(error)
