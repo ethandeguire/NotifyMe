@@ -12,7 +12,7 @@
 // ------ /Definitions -----
 
 import faunadb from 'faunadb' // Import faunaDB sdk
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 const _COLLECTION_NAME = "urls"
 
@@ -81,14 +81,25 @@ exports.handler = (event, context, callback) => {
           }
 
           if (!usernameExists){
-            console.log(`Username does not exists, creating a new account for ${body.data.username}`)
-            return fetch('/.netlify/functions/create', {
-              body: JSON.stringify(body),
-              method: 'POST'
-            }).then(response => {
-              console.log(response)
-              return JSON.stringify(response)
+            console.log(`Username does not exist, creating a new account for ${body.data.username}`)
+            // make request here
+            axios.post('/.netlify/functions/add-url-to-db', {
+              data: body
             })
+            .then((response) => {
+              console.log(response);
+              return callback(null, {
+                statusCode: 200,
+                body: JSON.stringify(returnVal)
+              })
+            })
+            .catch((error) => {
+              console.log(error);
+              return callback(null, {
+                statusCode: 400,
+                body: JSON.stringify(error)
+              })
+            });
           }
 
         })
