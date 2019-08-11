@@ -74,7 +74,7 @@ exports.handler = (event, context, callback) => {
 
           return callback(null, {
             statusCode: 200,
-            JSON,stringify(results)
+            body: JSON.stringify(results)
           })
 
         })
