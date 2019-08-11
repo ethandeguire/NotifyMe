@@ -83,21 +83,21 @@ exports.handler = (event, context, callback) => {
           if (!usernameExists){
             console.log(`Username does not exist, creating a new account for ${body.data.username}`)
             // make request here
-            axios.post('/.netlify/functions/add-url-to-db', {
+            axios.post('https://notifyme.netlify.com/.netlify/functions/add-url-to-db', {
               data: body
             })
             .then((response) => {
-              console.log(response);
+              console.log("AXIOS REQUEST SUCCESS:", response);
               return callback(null, {
                 statusCode: 200,
-                body: JSON.stringify(returnVal)
+                body: JSON.stringify("AXIOS REQUEST SUCCESS:", response)
               })
             })
             .catch((error) => {
-              console.log(error);
+              console.log("AXIOS REQUEST FAILURE:", error);
               return callback(null, {
                 statusCode: 400,
-                body: JSON.stringify(error)
+                body: JSON.stringify("AXIOS REQUEST FAILURE:", error)
               })
             });
           }
