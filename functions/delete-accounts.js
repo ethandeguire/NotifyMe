@@ -39,6 +39,10 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery)
         .then((objects) => {
+          
+          let results = []
+
+          // go through all of the objects in the db to see if they match
           for (let i = 0; i < refs.length; i++) {
             let obj = objects[i]
         
@@ -50,23 +54,29 @@ exports.handler = (event, context, callback) => {
             
             // delete if we should delete this one
             if (deleteThisOne){
-              return client.query(q.Delete(refs[i]))
+              results.push(client.query(q.Delete(refs[i]))
                 .then((returnVal) => {
                   console.log(`--Delete user '${obj.data.username}' successful`)
-                  return callback(null, {
-                    statusCode: 200,
-                    body: JSON.stringify(returnVal)
-                  })
+                  return returnVal
+
                 })
                 .catch((error) => {
                   console.log(`--error in deleting user '${obj.data.username}', error: ${error}`)
-                  return callback(null, {
-                    statusCode: 400,
-                    body: JSON.stringify(error)
-                  })
+                  return error
                 })
+              )
             }
           }
+
+          console.log("--")
+          console.log("--")
+          console.log("results final:\n", results)
+
+          return callback(null, {
+            statusCode: 200,
+            JSON,stringify(results)
+          })
+
         })
         .catch((error) => {
           console.log('--error', error)
