@@ -44,7 +44,7 @@ exports.handler = (event, context, callback) => {
             accountsToDelete.forEach(account => {
               if (account.username == userAccountData.username && account.password == userAccountData.password) {
                 console.log("match found", userAccountData.username, refs[i])
-                return client.query(q.Delete(q.Ref(q.Collection("urls"), refs[i])))
+                return client.query(q.Delete(refs[i]))
                   .then((returnVal) => {
                     console.log(`--Delete user '${userAccountData.username}' successful`)
                     return callback(null, {
