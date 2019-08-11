@@ -2,9 +2,8 @@
 //
 // JSON Input Data:
 //  {
-//    "ref":{
-//      {}
-//    }
+//    "ref": "REF"
+//    "collection": "COLLECTION"
 //  }
 //
 // ------ /Definitions -----
@@ -19,8 +18,8 @@ const client = new faunadb.Client({
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
-  let ref = JSON.parse(event.body).ref
-  return client.query(q.Delete(ref))
+  let data = JSON.parse(event.body)
+  return client.query(q.Delete(q.Ref(q.Collection(data["collection"]), data["ref"])))
     .then((response) => {
       return callback(null, {
         statusCode: 200,
