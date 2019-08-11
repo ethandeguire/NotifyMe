@@ -39,8 +39,6 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery)
         .then((userAccountObjects) => {
-          console.log("--userAccounts recieved ", userAccountObjects.length)
-          console.log("objecs:\n", userAccountObjects)
           for (let i = 0; i < refs.length; i++) {
             let userAccountData = userAccountObjects[i]
 
