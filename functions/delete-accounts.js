@@ -39,11 +39,11 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery)
         .then((userAccountObjects) => {
-          // console.log("--userAccounts recieved ", userAccountObjects.length)
-          // console.log("objecs:\n", userAccountObjects)
+          console.log("--userAccounts recieved ", userAccountObjects.length)
+          console.log("objecs:\n", userAccountObjects)
           for (let i = 0; i < refs.length; i++) {
-            let userAccountData = userAccountObjects[i].data
-            console.log(userAccountData)
+            let userAccountData = userAccountObjects[i]
+
             accountsToDelete.forEach(account => {
               console.log(account.username, userAccountData.username, account.password, userAccountData.password)
               if (account.username == userAccountData.username && account.password == userAccountData.password) {
