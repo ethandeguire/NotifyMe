@@ -84,7 +84,7 @@ exports.handler = (event, context, callback) => {
             console.log(`Username does not exist, creating a new account for ${body.data.username}`)
             // make request here
             return axios.post('/.netlify/functions/add-url-to-db', {
-              data: body
+              data: body.data
             })
             .then((response) => {
               console.log("User sent to add-url-to-db");
