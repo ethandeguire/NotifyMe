@@ -83,7 +83,7 @@ exports.handler = (event, context, callback) => {
           if (!usernameExists){
             console.log(`Username does not exist, creating a new account for ${body.data.username}`)
             // make request here
-            axios.post('https://notifyme.netlify.com/.netlify/functions/add-url-to-db', {
+            return axios.post('https://notifyme.netlify.com/.netlify/functions/add-url-to-db', {
               data: body
             })
             .then((response) => {
