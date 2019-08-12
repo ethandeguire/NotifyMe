@@ -45,18 +45,18 @@ exports.handler = (event, context, callback) => {
           })
         })
         .catch((response) => {
-          console.log(`error: ${response}`);
+          console.log(`error in forwarding request: ${response}`);
           return callback(null, {
             statusCode: 400,
-            message: `error: ${response}`
+            message: `error in forwarding request: ${response}`
           })
         })
     })
     .catch((response) => {
-      console.log(`error: ${response}`);
+      console.log(`error in getting username: ${response}`);
       return callback(null, {
         statusCode: 400,
-        message: `error: ${response}`
+        message: `error in getting username: ${response}`
       })
     })
 
