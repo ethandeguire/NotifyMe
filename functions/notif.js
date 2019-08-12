@@ -4,6 +4,8 @@
 //
 // ------ /Definitions -----
 
+const axios = require('axios');
+
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
   // tell the console:
@@ -20,8 +22,28 @@ exports.handler = (event, context, callback) => {
   console.log("--username: ", username)
   console.log("--event: ", event)
 
-  return callback(null, {
-    statusCode: 200,
-    message: "success"
+  let clientserverurl = geturlbyusername /* write this */
+
+  // Send a POST request
+  return axios({
+    method: 'post',
+    url: clientserverurl,
+    headers: event.headers
   })
+    .then((response) => {
+      console.log(`success: ${response}`);
+      return callback(null, {
+        statusCode: 200,
+        message: `success: ${response}`
+      })
+    })
+    .catch((response) => {
+      console.log(`error: ${response}`);
+      return callback(null, {
+        statusCode: 400,
+        message: `error: ${response}`
+      })
+    })
+
+
 }
