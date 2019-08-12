@@ -30,6 +30,7 @@ exports.handler = (event, context, callback) => {
     url: `https://notifyme.netlify.com/.netlify/functions/get-url-by-username?username=${username}`,
   })
     .then((response) => {
+      console.log(response)
       let url = JSON.parse(response)
       console.log("url, response: ", url, response)
 
@@ -55,6 +56,7 @@ exports.handler = (event, context, callback) => {
         })
     })
     .catch((response) => {
+      console.log(response)
       console.log(`error in getting username: ${response}`);
       return callback(null, {
         statusCode: 400,

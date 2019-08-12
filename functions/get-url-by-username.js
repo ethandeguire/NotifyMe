@@ -24,7 +24,7 @@ const client = new faunadb.Client({
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
   // tell the console:
-  console.log(`--Function 'get-all-${_COLLECTION_NAME}' invoked`)
+  console.log(`--Function 'get-url-by-username' invoked`)
 
   let username = event.queryStringParameters["username"]
 
@@ -54,7 +54,7 @@ exports.handler = (event, context, callback) => {
       console.log('--error', error)
       return callback(null, {
         statusCode: 400,
-        body: JSON.stringify(error)
+        body: error
       })
     })
 }
