@@ -22,10 +22,13 @@ exports.handler = (event, context, callback) => {
   console.log("--username: ", username)
   console.log("--event: ", event)
 
+  let usernameJson = JSON.stringify(username)
+  console.log("++", usernameJson)
+
   return axios({
     method: 'get',
     url: 'https://notifyme.netlify.com/.netlify/functions/get-url-by-username',
-    body: JSON.stringify({ username: username })
+    body: usernameJson
   })
     .then((response) => {
       let url = JSON.parse(response)
