@@ -25,7 +25,7 @@ exports.handler = (event, context, callback) => {
   return axios({
     method: 'get',
     url: 'https://notifyme.netlify.com/.netlify/functions/get-url-by-username',
-    body: { username: username }
+    body: JSON.stringify({ username: username })
   })
     .then((response) => {
       let url = JSON.parse(response)
