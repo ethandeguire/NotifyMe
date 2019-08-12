@@ -9,20 +9,16 @@ exports.handler = (event, context, callback) => {
   // tell the console:
   console.log(`--Function 'notif' invoked`)
 
-  try {
-    console.log(typeof event.queryStringParameters, event.queryStringParameters)
-    console.log(typeof event.body, event.body)
-  } catch (err) { console.log("1:", err) }
+  let params = event.queryStringParameters
+  if (!params["username"]) {
+    console.log("'username' query parameter must be included in post request")
+    return callback(null, { statusCode: 400, message: "'username' query parameter must be included in post request" })
+  }
 
-  try {
-    let params = JSON.parse(event.queryStringParameters)
-    let body = JSON.parse(event.body)
-  } catch (err) { console.log("2:", err) }
+  let username = params["username"]
 
-  try {
-    console.log("--params:", params)
-    console.log("body:", body)
-  } catch (err) { console.log("3:", err) }
+  console.log("--username: ", username)
+  console.log("--event: ", event)
 
   return callback(null, {
     statusCode: 200,
