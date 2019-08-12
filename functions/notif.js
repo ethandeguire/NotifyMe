@@ -28,10 +28,13 @@ exports.handler = (event, context, callback) => {
     body: { username: username }
   })
     .then((response) => {
+      let url = JSON.parse(response)
+      console.log("url, response: ", url, response)
+
       // Send a POST request
       return axios({
         method: 'post',
-        url: JSON.parse(response),
+        url: response,
         headers: event.headers
       })
         .then((response) => {
