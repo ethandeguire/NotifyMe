@@ -22,7 +22,7 @@ exports.handler = (event, context, callback) => {
   console.log("--username: ", username)
   console.log("--event: ", event)
 
-  let usernameJson = JSON.stringify(username)
+  let usernameJson = JSON.stringify({ username: username })
   console.log("++", usernameJson)
 
   return axios({
