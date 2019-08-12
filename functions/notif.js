@@ -30,8 +30,7 @@ exports.handler = (event, context, callback) => {
     url: `https://notifyme.netlify.com/.netlify/functions/get-url-by-username?username=${username}`,
   })
     .then((response) => {
-      console.log(response.data)
-      let url = JSON.parse(response.data)
+      let url = response.data
       console.log("url, response: ", url, response)
 
       // Send a POST request
