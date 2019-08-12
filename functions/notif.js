@@ -38,7 +38,7 @@ exports.handler = (event, context, callback) => {
       // Send a POST request
       return axios({
         method: 'post',
-        url: response,
+        url: url,
         headers: event.headers
       })
         .then((response) => {
