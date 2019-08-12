@@ -26,9 +26,7 @@ exports.handler = (event, context, callback) => {
   // tell the console:
   console.log(`--Function 'get-all-${_COLLECTION_NAME}' invoked`)
 
-  console.log(event.body)
-
-  let username = JSON.parse(event.body).username
+  let username = event.queryStringParameters["username"]
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
