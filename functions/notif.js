@@ -19,21 +19,12 @@ exports.handler = (event, context, callback) => {
 
   let username = params["username"]
 
-  console.log("--username: ", username)
-  console.log("--event: ", event)
-
-  let usernameJson = JSON.stringify({ username: username })
-  console.log("++", usernameJson)
-
   return axios({
     method: 'get',
     url: `https://notifyme.netlify.com/.netlify/functions/get-url-by-username?username=${username}`,
   })
     .then((response) => {
-      let data = response.data
-      console.log("--", data)
-      let url = data
-      console.log("url, response: ", url, response)
+      let url = response.data
 
       // Send a POST request
       return axios({
@@ -42,10 +33,10 @@ exports.handler = (event, context, callback) => {
         headers: event.headers
       })
         .then((response) => {
-          console.log(`success: ${response}`);
+          console.log(`--Webhook post message succesfully forwarded to ${url}`);
           return callback(null, {
             statusCode: 200,
-            message: `success: ${response}`
+            message: `--Webhook post message succesfully forwarded to ${url}`
           })
         })
         .catch((response) => {
@@ -57,7 +48,6 @@ exports.handler = (event, context, callback) => {
         })
     })
     .catch((response) => {
-      console.log(response)
       console.log(`error in getting username: ${response}`);
       return callback(null, {
         statusCode: 400,

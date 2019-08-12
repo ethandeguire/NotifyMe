@@ -42,7 +42,8 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery).then((urlObjects) => {
         urlObjects.forEach(urlObject => {
-          if (username == urlObject.data.username){
+          if (username == urlObject.data.username) {
+            console.log("--return url:", urlObject.data.url)
             return callback(null, {
               statusCode: 200,
               body: JSON.stringify(urlObject.data.url)
