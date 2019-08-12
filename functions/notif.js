@@ -22,20 +22,32 @@ exports.handler = (event, context, callback) => {
   console.log("--username: ", username)
   console.log("--event: ", event)
 
-  let clientserverurl = geturlbyusername /* write this */
-
-  // Send a POST request
   return axios({
-    method: 'post',
-    url: clientserverurl,
-    headers: event.headers
+    method: 'get',
+    url: 'https://notifyme.netlify.com/.netlify/functions/get-url-by-username',
+    body: { username: username }
   })
     .then((response) => {
-      console.log(`success: ${response}`);
-      return callback(null, {
-        statusCode: 200,
-        message: `success: ${response}`
+      // Send a POST request
+      return axios({
+        method: 'post',
+        url: JSON.parse(response),
+        headers: event.headers
       })
+        .then((response) => {
+          console.log(`success: ${response}`);
+          return callback(null, {
+            statusCode: 200,
+            message: `success: ${response}`
+          })
+        })
+        .catch((response) => {
+          console.log(`error: ${response}`);
+          return callback(null, {
+            statusCode: 400,
+            message: `error: ${response}`
+          })
+        })
     })
     .catch((response) => {
       console.log(`error: ${response}`);
@@ -44,6 +56,8 @@ exports.handler = (event, context, callback) => {
         message: `error: ${response}`
       })
     })
+
+
 
 
 }
