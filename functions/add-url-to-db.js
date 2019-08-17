@@ -23,6 +23,7 @@ const client = new faunadb.Client({
 exports.handler = (event, context, callback) => {
   // parse the string body into a useable JS object 
   const body = JSON.parse(event.body)
+  console.log("--event:", event)
 
   // tell the console:
   console.log('Function `add-url-to-db` invoked')

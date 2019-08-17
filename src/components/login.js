@@ -29,9 +29,11 @@ export default class Login extends React.Component {
       url: 'https://notifyme.netlify.com/.netlify/functions/add-url-to-db',
       headers: { 'Content-Type': 'application/json' },
       data: {
-        'username': this.state.email.split('@')[0],
-        'password': this.state.password,
-        'email': this.state.email
+        data: {
+          'username': this.state.email.split('@')[0],
+          'password': this.state.password,
+          'email': this.state.email
+        }
       }
     })
   }
