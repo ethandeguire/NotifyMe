@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display');
+
+.container {
+  background: lightgrey;
+  position: relative;
+  display: grid;
+  box-shadow: 2px 2px 10px 0 rgba(#333, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+	max-width: 500px;
+	margin-bottom: 100px;
+}
+
+.form-control {
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border: 4px solid 452E90;
+	margin: 4px 8px;
+	width: 75%;
+}
+
+.button {
+	background-color:#452E90;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #452E90;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:19px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
+	margin: 10px 0px 0px 0px;
+}
+
+.button:hover {
+	background-color:#8E7BCC;
+}
+.button:active {
+	position:relative;
+	top:1px;
+}
+
+.button:disabled {
+	background-color: #13063C;
+}
