@@ -13,8 +13,6 @@
 
 import faunadb from 'faunadb' // Import faunaDB sdk
 
-const _COLLECTION_NAME = "urls"
-
 // configure faunaDB Client with our secret
 const q = faunadb.query
 const client = new faunadb.Client({
@@ -25,6 +23,14 @@ const client = new faunadb.Client({
 exports.handler = (event, context, callback) => {
   // tell the console:
   console.log(`--Function 'get-all-${_COLLECTION_NAME}' invoked`)
+
+  let params = event.queryStringParameters
+  if (!params["type"]) {
+    console.log("'type' query parameter must be included in post request")
+    return callback(null, { statusCode: 400, message: "'type' query parameter must be included in post request" })
+  }
+
+  let _COLLECTION_NAME = params["type"]
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
