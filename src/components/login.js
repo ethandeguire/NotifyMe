@@ -46,6 +46,7 @@ export default class Login extends React.Component {
       .then((result) => {
         console.log(result)
       })
+      .catch((error) => {
         console.log(err)
       })
 
