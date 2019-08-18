@@ -21,9 +21,6 @@ const client = new faunadb.Client({
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
-  // tell the console:
-  console.log(`--Function 'get-all-${_COLLECTION_NAME}' invoked`)
-
   let params = event.queryStringParameters
   if (!params["type"]) {
     console.log("'type' query parameter must be included in post request")
@@ -31,6 +28,9 @@ exports.handler = (event, context, callback) => {
   }
 
   let _COLLECTION_NAME = params["type"]
+
+  // tell the console:
+  console.log(`--Function 'get-all-${_COLLECTION_NAME}' invoked`)
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
     .then((response) => {
