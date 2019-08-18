@@ -24,6 +24,13 @@ export default class Login extends React.Component {
   }
 
   handleSubmit = event => {
+    // attempt login
+    // if valid:
+    // store validation key and other data in FaunaDB
+    // store validation key in session data 
+    // redirect to user dashboard page
+    // if not valid:
+    // return login failed
     axios({
       method: 'post',
       url: 'https://notifyme.netlify.com/.netlify/functions/add-url-to-db',
@@ -36,6 +43,13 @@ export default class Login extends React.Component {
         }
       }
     })
+      .then((result) => {
+        console.log(result)
+      })
+        console.log(err)
+      })
+
+
   }
 
   render() {
