@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
 import "./../styles/login.css";
-import axios from "axios";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -34,16 +33,20 @@ export default class Login extends React.Component {
 
     // attempt login
     console.log(this.state.email, this.state.password)
-    axios({
+    fetch('https://notifyme.netlify.com/.netlify/functions/validate_user', {
       method: 'POST',
-      url: 'https://notifyme.netlify.com/.netlify/functions/validate_user',
-      // headers: { 'Content-Type': 'application/json' },
-      data: {
-        data: {
-          'username': this.state.email,
-          'password': this.state.password
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        {
+          data: {
+            'username': this.state.email,
+            'password': this.state.password
+          }
         }
-      }
+      ),
     })
       .then((result) => { // VALID
         console.log(result)
