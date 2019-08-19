@@ -56,7 +56,6 @@ exports.handler = (event, context, callback) => {
               if (body.data.session_token == obj.data.session_token) {
                 return callback(null, {
                   statusCode: 200,
-                  headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                   body: {
                     data: {
                       is_valid: true
@@ -66,7 +65,6 @@ exports.handler = (event, context, callback) => {
               } else {
                 return callback("error", {
                   statusCode: 200,
-                  headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                   body: {
                     data: {
                       is_valid: false
@@ -80,7 +78,6 @@ exports.handler = (event, context, callback) => {
         .catch((error) => {
           console.log('--error', error)
           return callback(null, {
-            headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
             statusCode: 400,
             body: JSON.stringify(error)
           })
@@ -89,7 +86,6 @@ exports.handler = (event, context, callback) => {
     .catch((error) => {
       console.log('--error', error)
       return callback(null, {
-        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
         statusCode: 400,
         body: JSON.stringify(error)
       })

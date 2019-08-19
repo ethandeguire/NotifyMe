@@ -66,14 +66,12 @@ exports.handler = (event, context, callback) => {
                 .then((response) => {
                   console.log(`validated user ${body.data.username} with token ${response.data.data.session_token}`)
                   callback(null, {
-                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                     statusCode: 200,
                     body: JSON.stringify(response.data) // this contains the session_key
                   })
                 })
                 .catch((error) => {
                   callback('error', {
-                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                     statusCode: 400,
                     body: JSON.stringify(error)
                   })
@@ -84,7 +82,6 @@ exports.handler = (event, context, callback) => {
             else if (body.data.username == obj.data.username && body.data.password != obj.data.password) {
               console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
               return callback(null, {
-                headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                 statusCode: 400,
                 body: `Bad password for user: ${body.data.username}`
               })
@@ -94,7 +91,6 @@ exports.handler = (event, context, callback) => {
         .catch((error) => {
           console.log('--error', error)
           return callback(null, {
-            headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
             statusCode: 400,
             body: JSON.stringify(error)
           })
@@ -103,7 +99,6 @@ exports.handler = (event, context, callback) => {
     .catch((error) => {
       console.log('--error', error)
       return callback(null, {
-        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
         statusCode: 400,
         body: JSON.stringify(error)
       })
