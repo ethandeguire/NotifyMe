@@ -31,23 +31,26 @@ export default class Login extends React.Component {
     // redirect to user dashboard page
     // if not valid:
     // return login failed
+
+    // attempty login
     axios({
       method: 'post',
-      url: 'https://notifyme.netlify.com/.netlify/functions/add-url-to-db',
+      url: 'https://notifyme.netlify.com/.netlify/functions/validate_user',
       headers: { 'Content-Type': 'application/json' },
       data: {
         data: {
-          'username': this.state.email.split('@')[0],
-          'password': this.state.password,
-          'email': this.state.email
+          'username': this.state.email,
+          'password': this.state.password
         }
       }
     })
-      .then((result) => {
-        console.log(result)
+      .then((result) => { // VALID
+        console.log('session_token:', result.data.data.session_token)
+        localStorage.setItem('session_token', result.data.data.session_token);
       })
-      .catch((error) => {
-        console.log(err)
+      .catch((error) => { // INVALID LOGIN
+        console.log(error)
+        // display a pretty 'invalid login' thing, offer to signup
       })
 
 

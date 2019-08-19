@@ -2,3 +2,4 @@ node_modules
 functions-build
 .cache
 public
+testing/testscript.js
