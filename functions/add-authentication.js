@@ -101,7 +101,7 @@ exports.handler = (event, context, callback) => {
                 console.log("success: " + JSON.stringify(response))
                 return callback(null, {
                   statusCode: 200,
-                  body: JSON.stringify({data: session_token})
+                  body: JSON.stringify({data: {session_token: session_token}})
                 })
               })
               .catch((error) => {

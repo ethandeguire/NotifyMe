@@ -4,8 +4,7 @@
 //  {
 //    data: {
 //      username: "{username}",
-//      password: "{password}",
-//      url: "url",
+//      password: "{password}"
 //    }
 //  } 
 //
@@ -34,7 +33,7 @@ exports.handler = (event, context, callback) => {
   let body = JSON.parse(event.body)
 
   // tell the console:
-  console.log(`--Function 'update-urls-in-db' invoked`)
+  console.log(`--Function 'validate-user' invoked`)
 
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_urls`))))
     .then((response) => {
@@ -65,9 +64,10 @@ exports.handler = (event, context, callback) => {
                 }
               })
                 .then((data) => {
+                  console.log(data)
                   callback(null, {
                     statusCode: 200,
-                    body: JSON.stringify(data.session_key) // this contains the session_key
+                    body: JSON.stringify(data.body) // this contains the session_key
                   })
                 })
                 .catch((error) => {
