@@ -3,7 +3,7 @@ const faunadb = require('faunadb') // Import faunaDB sdk
 // configure faunaDB Client with our secret
 const q = faunadb.query
 const client = new faunadb.Client({
-  secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9'
+  secret: process.env.FAUNADB_SERVER_SECRET
 })
 
 const collections = ["urls", "authentications"]
