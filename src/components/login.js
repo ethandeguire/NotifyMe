@@ -32,11 +32,12 @@ export default class Login extends React.Component {
     // if not valid:
     // return login failed
 
-    // attempty login
+    // attempt login
+    console.log(this.state.email, this.state.password)
     axios({
-      method: 'post',
+      method: 'POST',
       url: 'https://notifyme.netlify.com/.netlify/functions/validate_user',
-      headers: { 'Content-Type': 'application/json' },
+      // headers: { 'Content-Type': 'application/json' },
       data: {
         data: {
           'username': this.state.email,
@@ -45,14 +46,17 @@ export default class Login extends React.Component {
       }
     })
       .then((result) => { // VALID
+        console.log(result)
         console.log('session_token:', result.data.data.session_token)
         localStorage.setItem('session_token', result.data.data.session_token);
       })
       .catch((error) => { // INVALID LOGIN
         console.log(error)
+        localStorage.setItem('error', JSON.stringify(error));
         // display a pretty 'invalid login' thing, offer to signup
       })
 
+    console.log("AFTER")
 
   }
 
