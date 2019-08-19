@@ -63,11 +63,11 @@ exports.handler = (event, context, callback) => {
                   }
                 }
               })
-                .then((data) => {
-                  console.log(data)
+                .then((response) => {
+                  console.log(response)
                   callback(null, {
                     statusCode: 200,
-                    body: JSON.stringify(data.body) // this contains the session_key
+                    body: JSON.stringify(response.data) // this contains the session_key
                   })
                 })
                 .catch((error) => {
