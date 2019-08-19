@@ -53,16 +53,24 @@ exports.handler = (event, context, callback) => {
 
             // find object of this username
             if (body.data.username == obj.data.username) {
-              if (body.data.session_token == obj.data.session_token){
+              if (body.data.session_token == obj.data.session_token) {
                 return callback(null, {
-                  data: {
-                    is_valid: true
+                  statusCode: 200,
+                  headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
+                  body: {
+                    data: {
+                      is_valid: true
+                    }
                   }
                 })
               } else {
-                return callback ("error", {
-                  data: {
-                    is_valid: false
+                return callback("error", {
+                  statusCode: 200,
+                  headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
+                  body: {
+                    data: {
+                      is_valid: false
+                    }
                   }
                 })
               }
@@ -72,6 +80,7 @@ exports.handler = (event, context, callback) => {
         .catch((error) => {
           console.log('--error', error)
           return callback(null, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
             statusCode: 400,
             body: JSON.stringify(error)
           })
@@ -80,6 +89,7 @@ exports.handler = (event, context, callback) => {
     .catch((error) => {
       console.log('--error', error)
       return callback(null, {
+        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
         statusCode: 400,
         body: JSON.stringify(error)
       })

@@ -70,6 +70,7 @@ exports.handler = (event, context, callback) => {
                 .then((returnVal) => {
                   console.log(`--Refreshed session_token of user: ${body.data.username} to ${session_token}`)
                   return callback(null, {
+                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                     statusCode: 200,
                     body: JSON.stringify({data: {session_token: session_token}})
                   })
@@ -77,6 +78,7 @@ exports.handler = (event, context, callback) => {
                 .catch((error) => {
                   console.log('--error', error)
                   return callback(null, {
+                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                     statusCode: 400,
                     body: JSON.stringify(error)
                   })
@@ -100,6 +102,7 @@ exports.handler = (event, context, callback) => {
               .then((response) => {
                 console.log("success: " + JSON.stringify(response))
                 return callback(null, {
+                  headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                   statusCode: 200,
                   body: JSON.stringify({data: {session_token: session_token}})
                 })
@@ -107,6 +110,7 @@ exports.handler = (event, context, callback) => {
               .catch((error) => {
                 console.log("error: " + JSON.stringify(error))
                 return callback("error", {
+                  headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
                   statusCode: 400,
                   body: JSON.stringify(error)
                 })
@@ -117,6 +121,7 @@ exports.handler = (event, context, callback) => {
         .catch((error) => {
           console.log('--error', error)
           return callback(null, {
+            headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
             statusCode: 400,
             body: JSON.stringify(error)
           })
@@ -125,6 +130,7 @@ exports.handler = (event, context, callback) => {
     .catch((error) => {
       console.log('--error', error)
       return callback(null, {
+        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true, },
         statusCode: 400,
         body: JSON.stringify(error)
       })
