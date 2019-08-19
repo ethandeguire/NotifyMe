@@ -64,7 +64,7 @@ exports.handler = (event, context, callback) => {
                 }
               })
                 .then((response) => {
-                  console.log(response)
+                  console.log(`validated user ${body.data.username} with token ${response.data.data.session_token}`)
                   callback(null, {
                     statusCode: 200,
                     body: JSON.stringify(response.data) // this contains the session_key
