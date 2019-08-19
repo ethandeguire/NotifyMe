@@ -32,7 +32,6 @@ export default class Login extends React.Component {
     // return login failed
 
     // attempt login
-    console.log(this.state.email, this.state.password)
     fetch('https://notifyme.netlify.com/.netlify/functions/validate_user', {
       method: 'POST',
       headers: {
@@ -57,9 +56,6 @@ export default class Login extends React.Component {
         localStorage.setItem('error', JSON.stringify(error));
         // display a pretty 'invalid login' thing, offer to signup
       })
-
-    console.log("AFTER")
-
   }
 
   render() {
