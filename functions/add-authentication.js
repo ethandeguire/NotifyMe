@@ -71,7 +71,7 @@ exports.handler = (event, context, callback) => {
                   console.log(`--Refreshed session_token of user: ${body.data.username} to ${session_token}`)
                   return callback(null, {
                     statusCode: 200,
-                    body: JSON.stringify({data: session_token})
+                    body: JSON.stringify({data: {session_token: session_token}})
                   })
                 })
                 .catch((error) => {

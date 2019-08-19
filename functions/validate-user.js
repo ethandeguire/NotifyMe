@@ -20,6 +20,7 @@
 // ------ /Definitions -----
 
 import faunadb from 'faunadb' // Import faunaDB sdk
+import Axios from 'axios';
 
 // configure faunaDB Client with our secret
 const q = faunadb.query
@@ -54,12 +55,31 @@ exports.handler = (event, context, callback) => {
             // if username and password are correct
             if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
               // create new session token in database, send back to client
-              
-
+              return Axios({
+                method: 'POST',
+                url: 'https://notifyme.netlify.com/.netlify/functions/add-authentication',
+                data: {
+                  data: {
+                    username: body.data.username
+                  }
+                }
+              })
+                .then((data) => {
+                  callback(null, {
+                    statusCode: 200,
+                    body: JSON.stringify(data.session_key) // this contains the session_key
+                  })
+                })
+                .catch((error) => {
+                  callback('error', {
+                    statusCode: 400,
+                    body: JSON.stringify(error)
+                  })
+                })
             }
 
             // if password is incorrect
-            else if (body.data.username == obj.data.username && body.data.password != obj.data.password){
+            else if (body.data.username == obj.data.username && body.data.password != obj.data.password) {
               console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
               return callback(null, {
                 statusCode: 400,
