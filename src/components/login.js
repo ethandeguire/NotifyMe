@@ -31,20 +31,10 @@ export default class Login extends React.Component {
     // if not valid:
     // return login failed
 
-    // attempt login
-    fetch('https://notifyme.netlify.com/.netlify/functions/validate_user', {
+    return fetch('http://localhost:8001/.netlify/functions/validate-user', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(
-        {
-          data: {
-            'username': this.state.email,
-            'password': this.state.password
-          }
-        }
-      ),
+      // headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: { username: "ethandeguire@gmail.com", password: "ethanpassword" } })
     })
       .then((result) => { // VALID
         console.log(result)
@@ -56,6 +46,8 @@ export default class Login extends React.Component {
         localStorage.setItem('error', JSON.stringify(error));
         // display a pretty 'invalid login' thing, offer to signup
       })
+
+
   }
 
   render() {

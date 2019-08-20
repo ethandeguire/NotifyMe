@@ -35,6 +35,13 @@ exports.handler = (event, context, callback) => {
   // tell the console:
   console.log(`--Function 'validate-user' invoked`)
 
+  // return callback(null, {
+  //   statusCode: 200,
+  //   headers : {"Access-Control-Allow-Origin": "*"},
+  //   body: JSON.stringify({testing: "testing"})
+  // })
+
+
   return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_urls`))))
     .then((response) => {
       const refs = response.data
@@ -43,6 +50,8 @@ exports.handler = (event, context, callback) => {
       const getAllDataQuery = refs.map((ref) => {
         return q.Get(ref)
       })
+
+
 
       // then query the refs
       return client.query(getAllDataQuery)
@@ -57,22 +66,21 @@ exports.handler = (event, context, callback) => {
               return Axios({
                 method: 'POST',
                 url: 'https://notifyme.netlify.com/.netlify/functions/add-authentication',
-                data: {
-                  data: {
-                    username: body.data.username
-                  }
-                }
+                data: { data: { username: body.data.username } }
               })
                 .then((response) => {
-                  console.log(`validated user ${body.data.username} with token ${response.data.data.session_token}`)
-                  callback(null, {
+                  console.log(`validated user '${body.data.username}' with token '${response.data.data.session_token}'`)
+                  return callback(null, {
                     statusCode: 200,
-                    body: JSON.stringify(response.data) // this contains the session_key
+                    headers: { "Access-Control-Allow-Origin": "*" },
+                    body: "testing" // this contains the session_key
                   })
                 })
                 .catch((error) => {
-                  callback('error', {
+                  console.log("error:", error)
+                  return callback('error', {
                     statusCode: 400,
+                    headers: { "Access-Control-Allow-Origin": "*" },
                     body: JSON.stringify(error)
                   })
                 })
@@ -81,8 +89,9 @@ exports.handler = (event, context, callback) => {
             // if password is incorrect
             else if (body.data.username == obj.data.username && body.data.password != obj.data.password) {
               console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
-              return callback(null, {
+              callback(null, {
                 statusCode: 400,
+                headers: { "Access-Control-Allow-Origin": "*" },
                 body: `Bad password for user: ${body.data.username}`
               })
             }
@@ -92,7 +101,8 @@ exports.handler = (event, context, callback) => {
           console.log('--error', error)
           return callback(null, {
             statusCode: 400,
-            body: JSON.stringify(error)
+            headers: { "Access-Control-Allow-Origin": "*" },
+            message: JSON.stringify(error)
           })
         })
     })
@@ -100,7 +110,8 @@ exports.handler = (event, context, callback) => {
       console.log('--error', error)
       return callback(null, {
         statusCode: 400,
-        body: JSON.stringify(error)
+        headers: { "Access-Control-Allow-Origin": "*" },
+        message: JSON.stringify(error)
       })
     })
 }
