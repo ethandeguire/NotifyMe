@@ -78,7 +78,7 @@ exports.handler = (event, context, callback) => {
                 .catch((error) => {
                   console.log("error:", error)
                   return callback('error', {
-                    statusCode: 400,
+                    statusCode: 200,
                     headers: { "Access-Control-Allow-Origin": "*" },
                     body: JSON.stringify(error)
                   })
@@ -89,7 +89,7 @@ exports.handler = (event, context, callback) => {
             else if (body.data.username == obj.data.username && body.data.password != obj.data.password) {
               console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
               callback(null, {
-                statusCode: 400,
+                statusCode: 200,
                 headers: { "Access-Control-Allow-Origin": "*" },
                 body: `Bad password for user: ${body.data.username}`
               })
@@ -99,7 +99,7 @@ exports.handler = (event, context, callback) => {
         .catch((error) => {
           console.log('--error', error)
           return callback(null, {
-            statusCode: 400,
+            statusCode: 200,
             headers: { "Access-Control-Allow-Origin": "*" },
             message: JSON.stringify(error)
           })
@@ -108,7 +108,7 @@ exports.handler = (event, context, callback) => {
     .catch((error) => {
       console.log('--error', error)
       return callback(null, {
-        statusCode: 400,
+        statusCode: 200,
         headers: { "Access-Control-Allow-Origin": "*" },
         message: JSON.stringify(error)
       })
