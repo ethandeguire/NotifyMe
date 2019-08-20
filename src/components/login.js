@@ -31,7 +31,7 @@ export default class Login extends React.Component {
     // if not valid:
     // return login failed
 
-    return fetch('http://localhost:8001/.netlify/functions/validate-user', {
+    return fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
       method: 'POST',
       // headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data: { username: "ethandeguire@gmail.com", password: "ethanpassword" } })

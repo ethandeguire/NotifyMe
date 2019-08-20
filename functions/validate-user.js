@@ -56,7 +56,6 @@ exports.handler = (event, context, callback) => {
       // then query the refs
       return client.query(getAllDataQuery)
         .then((objects) => {
-
           for (let i = 0; i < refs.length; i++) {
             let obj = objects[i]
 
@@ -73,7 +72,7 @@ exports.handler = (event, context, callback) => {
                   return callback(null, {
                     statusCode: 200,
                     headers: { "Access-Control-Allow-Origin": "*" },
-                    body: "testing" // this contains the session_key
+                    body: JSON.stringify(response.data) // this contains the session_key
                   })
                 })
                 .catch((error) => {
