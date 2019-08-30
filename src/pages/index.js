@@ -8,12 +8,13 @@ import SEO from "../components/seo"
 const IndexPage = () => (
   <Layout>
     <SEO title="Home" />
-    <h1>Welcome</h1>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/authenticate/">Sign In /</Link>
+    <h1>Receive desktop notifications - from anything!</h1>
+    <p>
+      NotifyMe integrates with webhooks from the internet to send you a
+      desktop notification, whenever you want. It's customizable, lightweight,
+      and easy to use. Sign up today!
+    </p>
+    <Link to="/authenticate/">Sign In / Up</Link>
   </Layout>
 )
 

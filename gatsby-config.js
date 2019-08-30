@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
     title: `NotifyMe`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    description: `Get desktop notifications from the internet`,
+    author: `@ethandeguire`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
