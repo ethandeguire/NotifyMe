@@ -39,6 +39,7 @@
     "build:functions": "netlify-lambda build functions -c ./webpack.config.js",
     "build:gatsby": "gatsby build",
     "create-collections": "node ./functions/scripts/create-collections.js",
-    "develop": "gatsby develop"
+    "gatsbydevelop": "gatsby develop",
+    "functionsdevelop": "npm run start:server"
   }
 }

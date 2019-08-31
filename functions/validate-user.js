@@ -30,6 +30,15 @@ const client = new faunadb.Client({
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
 
+  console.log('0-0-0-0-0-0-0-0-0-0-0-0')
+  console.log(event, context)
+
+  if (event.httpMethod == 'OPTIONS'){
+    return callback(null, {
+      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*', "Access-Control-Allow-Credentials" : true},
+    })
+  }
+
   let reqUsername, reqPassword
   try {
     reqUsername = event.headers.username
