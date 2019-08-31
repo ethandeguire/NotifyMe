@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import { Redirect } from 'react-router-dom';
 import "./../styles/login.css";
 
 export default class Login extends React.Component {
@@ -32,23 +33,21 @@ export default class Login extends React.Component {
     // if not valid:
     // return login failed
 
-    return fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
+    console.log("STARTING FETCH NOW")
+    fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
       method: 'POST',
-      // mode: 'no-cors',
-      headers: { username: "ethandeguire@gmail.com", password: "ethanpassword" },
+      headers: { 'username': 'ethandeguire', 'password': 'ethanpassword' }
     })
-      .then((result) => { // VALID
-        console.log("RESTULT:", result)
-        console.log('session_token:', result.data.data.session_token)
-        localStorage.setItem('session_token', result.data.data.session_token);
+      .then(response => response.json())
+      .then(res => {
+        console.log('session_token:', res["data"]["session_token"])
+        localStorage.setItem('session_token', res["data"]["session_token"])
+
       })
-      .catch((error) => { // INVALID LOGIN
+      .catch((error) => {
         console.log("ERROR:", error)
-        localStorage.setItem('error', JSON.stringify(error));
-        // display a pretty 'invalid login' thing, offer to signup
       })
-
-
+    
   }
 
   render() {

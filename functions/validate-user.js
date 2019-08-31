@@ -40,6 +40,7 @@ exports.handler = (event, context, callback) => {
     return callback(null, {
       statusCode: 200,
       headers: _headers,
+      body: JSON.stringify("OPTIONS REQUEST RETURN")
     })
   }
 
