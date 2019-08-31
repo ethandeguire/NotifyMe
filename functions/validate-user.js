@@ -38,7 +38,7 @@ exports.handler = (event, context, callback) => {
     console.log('-err', err)
     return callback(null, {
       statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*'},
+      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
       message: JSON.stringify(err)
     })
   }
@@ -73,7 +73,7 @@ exports.handler = (event, context, callback) => {
                   console.log(`validated user '${reqUsername}' with token '${response.data.data.session_token}'`)
                   return callback(null, {
                     statusCode: 200,
-                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*'},
+                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
                     body: JSON.stringify(response.data) // this contains the session_key
                   })
                 })
@@ -81,7 +81,7 @@ exports.handler = (event, context, callback) => {
                   console.log("error:", error)
                   return callback('error', {
                     statusCode: 200,
-                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*'},
+                    headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
                     body: JSON.stringify(error)
                   })
                 })
@@ -92,7 +92,7 @@ exports.handler = (event, context, callback) => {
               console.log(`Bad password for user: ${reqUsername}. Passwords: ${reqPassword}, ${obj.data.password}`)
               return callback(null, {
                 statusCode: 200,
-                headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*'},
+                headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
                 body: `Bad password for user: ${reqUsername}`
               })
             } ``
@@ -102,7 +102,7 @@ exports.handler = (event, context, callback) => {
           console.log('--error', error)
           return callback(null, {
             statusCode: 400,
-            headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*'},
+            headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
             message: JSON.stringify(error)
           })
         })
@@ -111,7 +111,7 @@ exports.handler = (event, context, callback) => {
       console.log('--error', error)
       return callback(null, {
         statusCode: 400,
-        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*'},
+        headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
         message: JSON.stringify(error)
       })
     })
