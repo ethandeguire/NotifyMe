@@ -27,6 +27,9 @@ const client = new faunadb.Client({
   secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9'
 })
 
+
+const _headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'}
+
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
 
@@ -36,7 +39,7 @@ exports.handler = (event, context, callback) => {
   if (event.httpMethod == 'OPTIONS'){
     return callback(null, {
       statusCode: 200,
-      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'},
+      headers: _headers,
     })
   }
 
@@ -48,7 +51,7 @@ exports.handler = (event, context, callback) => {
     console.log('-err', err)
     return callback(null, {
       statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*', "Access-Control-Allow-Credentials" : true},
+      headers: _headers,
       message: JSON.stringify(err)
     })
   }
@@ -90,6 +93,7 @@ exports.handler = (event, context, callback) => {
                   console.log("error:", error)
                   return callback('error', {
                     statusCode: 200,
+                    headers: _headers,
                     body: JSON.stringify(error)
                   })
                 })
@@ -100,6 +104,7 @@ exports.handler = (event, context, callback) => {
               console.log(`Bad password for user: ${reqUsername}. Passwords: ${reqPassword}, ${obj.data.password}`)
               return callback(null, {
                 statusCode: 200,
+                headers: _headers,
                 body: `Bad password for user: ${reqUsername}`
               })
             } ``
@@ -109,6 +114,7 @@ exports.handler = (event, context, callback) => {
           console.log('--error', error)
           return callback(null, {
             statusCode: 400,
+            headers: _headers,
             message: JSON.stringify(error)
           })
         })
@@ -117,6 +123,7 @@ exports.handler = (event, context, callback) => {
       console.log('--error', error)
       return callback(null, {
         statusCode: 400,
+        headers: _headers,
         message: JSON.stringify(error)
       })
     })
