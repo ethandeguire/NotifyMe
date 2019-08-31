@@ -31,10 +31,11 @@ const client = new faunadb.Client({
 exports.handler = (event, context, callback) => {
 
   console.log('0-0-0-0-0-0-0-0-0-0-0-0')
-  console.log(event, context)
+  // console.log(event, context)
 
   if (event.httpMethod == 'OPTIONS'){
     return callback(null, {
+      statusCode: 200,
       headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*', "Access-Control-Allow-Credentials" : true},
     })
   }
