@@ -38,7 +38,7 @@ exports.handler = (event, context, callback) => {
     console.log('-err', err)
     return callback(null, {
       statusCode: 400,
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*'},
       message: JSON.stringify(err)
     })
   }
