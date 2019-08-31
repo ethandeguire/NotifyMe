@@ -35,6 +35,7 @@ exports.handler = (event, context, callback) => {
     reqUsername = event.headers.username
     reqPassword = event.headers.password
   } catch (err){
+    console.log('-err', err)
     return callback(null, {
       statusCode: 400,
       headers: { 'Access-Control-Allow-Origin': '*' },
