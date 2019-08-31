@@ -23,26 +23,27 @@ export default class Login extends React.Component {
   }
 
   handleSubmit = event => {
+    //steps:
     // attempt login
     // if valid:
-    // store validation key and other data in FaunaDB
-    // store validation key in session data 
-    // redirect to user dashboard page
+    //  store validation key and other data in FaunaDB
+    //  store validation key in session data 
+    //  redirect to user dashboard page
     // if not valid:
     // return login failed
 
     return fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
       method: 'POST',
-      // headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: { username: "ethandeguire@gmail.com", password: "ethanpassword" } })
+      // mode: 'no-cors',
+      headers: { username: "ethandeguire@gmail.com", password: "ethanpassword" },
     })
       .then((result) => { // VALID
-        console.log(result)
+        console.log("RESTULT:", result)
         console.log('session_token:', result.data.data.session_token)
         localStorage.setItem('session_token', result.data.data.session_token);
       })
       .catch((error) => { // INVALID LOGIN
-        console.log(error)
+        console.log("ERROR:", error)
         localStorage.setItem('error', JSON.stringify(error));
         // display a pretty 'invalid login' thing, offer to signup
       })
