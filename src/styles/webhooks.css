@@ -1,0 +1,24 @@
+.webhookhistorybox {
+  padding: 15px;
+  margin: 2px;
+
+  text-align: center;
+  background-color: white;
+
+  border-radius: 20px;
+  border: #452E90;
+  border-width: 2px;
+  border-style: solid;
+
+  min-width: 450px;
+  float: left;
+}
+
+.webhooktextline {
+  text-align: left
+}
+
+.allwebhooks {
+  padding: 0px;
+  margin-bottom: 10px;
+}

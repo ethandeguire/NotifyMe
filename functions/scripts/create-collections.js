@@ -6,7 +6,7 @@ const client = new faunadb.Client({
   secret: process.env.FAUNADB_SERVER_SECRET
 })
 
-const collections = ["urls", "authentications"]
+const collections = ["urls", "authentications", "webhookhistory"]
 let errors = []
 
 collections.forEach(collection => {

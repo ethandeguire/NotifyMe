@@ -11,111 +11,54 @@
 //
 // ------ /Definitions -----
 
-import faunadb from 'faunadb' // Import faunaDB sdk
-const axios = require('axios');
-
-const _COLLECTION_NAME = "urls"
-
-// configure faunaDB Client with our secret
-const q = faunadb.query
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB_SERVER_SECRET
-})
+// import my functions
+const helpers = require('./tools/helpers')
+const callbackPackager = helpers.callbackPackager
+const getObjectByUsernameAndCollection = helpers.getObjectByUsernameAndCollection
+const updateDocument = helpers.updateDocument
+const createDocument = helpers.createDocument
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
 
-  let body = JSON.parse(event.body)
+  const data = JSON.parse(event.body)["data"]
+  const [username, password, url] = [data["username"], data["password"], data["url"]]
 
-  // tell the console:
-  console.log(`--Function 'update-${_COLLECTION_NAME}-in-db' invoked`)
+  
 
-  return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_${_COLLECTION_NAME}`))))
-    .then((response) => {
-      const refs = response.data
+  return getObjectByUsernameAndCollection(username, 'urls')
+    .then((urlObject) => {
 
-      // create new query out of refs
-      const getAllDataQuery = refs.map((ref) => {
-        return q.Get(ref)
-      })
+      console.log('*****',username, password, url)
 
-      // then query the refs
-      return client.query(getAllDataQuery)
-        .then((objects) => {
+      // if we found a user by that username
+      if (urlObject != null) {
 
-          let usernameExists = false
+        // see if the password is incorrect - return saying so
+        if (password != urlObject["password"]) return callbackPackager(callback, 400, { error: "Password is incorrect for this user" })
 
-          for (let i = 0; i < refs.length; i++) {
-            let obj = objects[i]
+        // see if the password is correct
+        if (password == urlObject["password"]) {
 
-            // If this, then username exists, not new user
-            if (body.data.username == obj.data.username) usernameExists = true
-
-            // if username and password are correct
-            if (body.data.username == obj.data.username && body.data.password == obj.data.password) {
-              return client.query(q.Update(refs[i], { data: { url: body.data.url } }))
-                .then((returnVal) => {
-                  console.log(`--Updated url of user: ${body.data.username} to ${body.data.url}`)
-                  return callback(null, {
-                    statusCode: 200,
-                    body: JSON.stringify(returnVal)
-                  })
-                })
-                .catch((error) => {
-                  console.log('--error', error)
-                  return callback(null, {
-                    statusCode: 400,
-                    body: JSON.stringify(error)
-                  })
-                })
-            }
-
-            // if password is incorrect
-            else if (body.data.username == obj.data.username && body.data.password != obj.data.password){
-              console.log(`Bad password for user: ${body.data.username}. Passwords: ${body.data.password}, ${obj.data.password}`)
-              return callback(null, {
-                statusCode: 400,
-                body: `Bad password for user: ${body.data.username}`
-              })
-            }
-          }
-
-          if (!usernameExists){
-            console.log(`Username does not exist, creating a new account for ${body.data.username}`)
-            // make request here
-            return axios.post('https://notifyme.netlify.com/.netlify/functions/add-url-to-db', {
-              data: body.data
+          // update the url in fauna
+          return updateDocument(urlObject.ref, { data: { url: url } })
+            .then((returnVal) => {
+              console.log(`--Updated url of user: ${username} to ${url}`)
+              return callbackPackager(callback, 200, { data: returnVal.data })
             })
-            .then((response) => {
-              console.log("User sent to add-url-to-db");
-              return callback(null, {
-                statusCode: 200,
-                body: JSON.stringify(`There was no user by ${body.data.username} with the provided password, so one has been created`)
-              })
-            })
-            .catch((error) => {
-              console.log("AXIOS REQUEST FAILURE:", error);
-              return callback(null, {
-                statusCode: 400,
-                body: JSON.stringify(`There was no user by ${body.data.username} with the provided password, and we got an error when creating one: ${error}`)
-              })
-            });
-          }
+        }
+      }
 
-        })
-        .catch((error) => {
-          console.log('--error', error)
-          return callback(null, {
-            statusCode: 400,
-            body: JSON.stringify(error)
-          })
-        })
+      // if we didnt find a user by that username
+      else {
+        console.log(`--Username does not exist, creating a new account for ${username}`)
+        return createDocument('urls', {data: data})
+          .then((response) => { return callbackPackager(callback, 200, { data: data }) })
+      }
+
     })
     .catch((error) => {
-      console.log('--error', error)
-      return callback(null, {
-        statusCode: 400,
-        body: JSON.stringify(error)
-      })
+      console.log("error:", error)
+      return callbackPackager(callback, 500, { error: error })
     })
 }

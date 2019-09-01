@@ -4,6 +4,8 @@ const helpers = require('./tools/helpers')
 const callbackPackager = helpers.callbackPackager
 const getObjectByUsernameAndCollection = helpers.getObjectByUsernameAndCollection
 const addAuthenticationByUsername = helpers.addAuthenticationByUsername
+const createDocument = helpers.createDocument
+
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
@@ -21,20 +23,27 @@ exports.handler = (event, context, callback) => {
     return callbackPackager(callback, 400, { error: 'username and password headers must be included in the request' + JSON.stringify(err) })
   }
 
+  if (reqPassword.length == 0 || reqUsername.length == 0) return callbackPackager(callback, 400, { error: 'Include both a username and a password' })
+
   return getObjectByUsernameAndCollection(reqUsername, 'urls')
     .then((urlObject) => {
 
       // check if we found a user
-      if (urlObject == null) return callbackPackager(callback, 400, { error: "Username does not exist" })
+      if (urlObject != null) return callbackPackager(callback, 400, { error: "A user is already using this email" })
 
-      // check if the password doesnt match
-      if (reqPassword != urlObject.password) return callbackPackager(callback, 400, { error: "Password is incorrect for this user" })
-
-      // create new session token in database, send back to client
-      return addAuthenticationByUsername(reqUsername)
+      // create a new user:
+      return createDocument('urls', { data: { username: reqUsername, password: reqPassword } })
         .then((result) => {
-          return callbackPackager(callback, 200, {data: {session_token: result}})
+
+          // authenticate the new user
+          return addAuthenticationByUsername(reqUsername)
+            .then((result) => {
+
+              // return the new user's session_token
+              return callbackPackager(callback, 200, { data: { session_token: result } })
+            })
         })
+
     })
     .catch((err) => {
       console.log("error:", err)

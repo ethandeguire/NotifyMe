@@ -1,75 +1,35 @@
-import faunadb from 'faunadb' // Import faunaDB sdk
 
-// configure faunaDB Client with our secret
-const q = faunadb.query
-const client = new faunadb.Client({
-  secret: process.env.FAUNADB_SERVER_SECRET
-})
+const AUTHENTICATION_EXPIRATION_TIME_MINS = 120
+
+// import my functions
+const helpers = require('./tools/helpers')
+const callbackPackager = helpers.callbackPackager
+const getObjectByUsernameAndCollection = helpers.getObjectByUsernameAndCollection
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
 
-  let body = JSON.parse(event.body)
+  const data = JSON.parse(event.body).data
+  const [username, session_token] = [data["username"], data["session_token"]]
 
   // tell the console:
   console.log(`--Function 'validate-user' invoked`)
 
-  return client.query(q.Paginate(q.Match(q.Ref(`indexes/all_authentications`))))
-    .then((response) => {
-      const refs = response.data
+  getObjectByUsernameAndCollection(username, 'authentications')
+    .then((urlObject) => {
 
-      // create new query out of refs
-      const getAllDataQuery = refs.map((ref) => {
-        return q.Get(ref)
-      })
+      if (urlObject == null) return callbackPackager(callback, 400, { error: "This user is not authenticated" })
 
-      // then query the refs
-      return client.query(getAllDataQuery)
-        .then((objects) => {
+      // find the difference in minutes between now and token creation
+      let difMins = Math.round((Date.now() - (urlObject['timestamp'] / 1000)) / 1000 / 60 * 100) / 100
 
-          for (let i = 0; i < refs.length; i++) {
-            let obj = objects[i]
+      // if the token is correct and not older than the expiry period, return valid
+      if (urlObject['session_token'] == session_token && difMins < AUTHENTICATION_EXPIRATION_TIME_MINS) {
+        return callbackPackager(callback, 200, { data: { is_valid: true , mins_left: AUTHENTICATION_EXPIRATION_TIME_MINS - difMins} })
+      } 
 
-            // find object of this username
-            if (body.data.username == obj.data.username) {
-              if (body.data.session_token == obj.data.session_token) {
-                return callback(null, {
-                  statusCode: 200,
-                  body: {
-                    data: {
-                      is_valid: true,
-                      name: obj.data.name,
-                      email: obj.data.email,
-                      url: obj.data.url
-                    }
-                  }
-                })
-              } else {
-                return callback("error", {
-                  statusCode: 200,
-                  body: {
-                    data: {
-                      is_valid: false
-                    }
-                  }
-                })
-              }
-            }
-          }
-        })
-        .catch((error) => {
-          console.log('--error', error)
-          return callback(null, {
-            statusCode: 400,
-            body: JSON.stringify(error)
-          })
-        })
-    })
-    .catch((error) => {
-      console.log('--error', error)
-      return callback(null, {
-        statusCode: 400,
-        body: JSON.stringify(error)
-      })
+      // if its not valid, return that
+      else return callbackPackager(callback, 400, { data: { is_valid: false } })
+      
     })
 }

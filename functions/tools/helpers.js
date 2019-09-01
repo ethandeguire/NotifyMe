@@ -9,11 +9,11 @@ const client = new faunadb.Client({ secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yx
 
 // ----------------- helper functions -----------------
 // sends a callback with a status code and the required headers
-const callbackPackager = (callback, statCode, errObj) => {
+const callbackPackager = (callback, statCode, retobj) => {
   return callback(null, {
     statusCode: statCode,
     headers: { 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*' },
-    body: JSON.stringify(errObj)
+    body: JSON.stringify(retobj)
   })
 }
 
@@ -33,11 +33,13 @@ const getAllObjectsInCollection = (collection) => {
       return client.query(getAllDataQuery)
         .then((objects) => {
 
+          // add the ref onto each of the data objects
           for (let i = 0; i < refs.length; i++) {
             objects[i]['data']['ref'] = refs[i]
+            objects[i]['data']['timestamp'] = objects[i]['ts']
           }
-
           // return the objects
+
           return objects
         })
     })
@@ -48,6 +50,7 @@ const getObjectByUsernameAndCollection = (searchUsername, collection) => {
   console.log('--getObjectByUsernameAndCollection invoked')
   return getAllObjectsInCollection(collection)
     .then((objects) => {
+      
       for (let i = 0; i < objects.length; i++) {
 
         // return the object if the username matches
@@ -72,33 +75,39 @@ const addAuthenticationByUsername = (usernameToAuthenticate) => {
         let session_token = newSessionToken()
 
         // create a document in collection authentications with data from the event
-        return client.query(q.Create(
-          q.Collection("authentications"), //returns the ref of the collection
-          {
-            data: {
-              username: usernameToAuthenticate,
-              session_token: session_token
-            }
-          }
-        ))
-          .then((response) => {
-            return session_token
-          })
-      } else {
-
-        // user already has a session token, create them a new session token
-        let session_token = newSessionToken()
-        return client.query(q.Update(urlObject.ref, {
+        return createDocument('authentications', {
           data: {
             username: usernameToAuthenticate,
             session_token: session_token
           }
-        }))
-          .then((returnVal) => {
+        })
+          .then((response) => {
+            return session_token
+          })
+
+      } else {
+
+        // user already has a session token, create them a new session token
+        let session_token = newSessionToken()
+        return updateDocument(urlObject.ref, {
+          data: {
+            username: usernameToAuthenticate,
+            session_token: session_token
+          }
+        })
+          .then((response) => {
             return session_token
           })
       }
     })
+}
+
+const createDocument = (collection, document) => {
+  return client.query(q.Create(q.Collection(collection), document))
+}
+
+const updateDocument = (ref, document) => {
+  return client.query(q.Update(ref, document))
 }
 
 
@@ -109,7 +118,8 @@ exports.callbackPackager = callbackPackager
 exports.getAllDBObjectsInCollection = getAllObjectsInCollection
 exports.getObjectByUsernameAndCollection = getObjectByUsernameAndCollection
 exports.addAuthenticationByUsername = addAuthenticationByUsername
-
+exports.createDocument = createDocument
+exports.updateDocument = updateDocument
 
 
 

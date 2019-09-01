@@ -6,6 +6,13 @@
 
 const axios = require('axios');
 
+// import my functions
+const helpers = require('./tools/helpers')
+const callbackPackager = helpers.callbackPackager
+const getObjectByUsernameAndCollection = helpers.getObjectByUsernameAndCollection
+const createDocument = helpers.createDocument
+
+
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
   // tell the console:
@@ -14,45 +21,47 @@ exports.handler = (event, context, callback) => {
   let params = event.queryStringParameters
   if (!params["username"]) {
     console.log("'username' query parameter must be included in post request")
-    return callback(null, { statusCode: 400, message: "'username' query parameter must be included in post request" })
+    return callbackPackager(callback, 400, { error: "'username' query parameter must be included in post request" })
   }
 
-  let username = params["username"]
+  const username = params["username"]
 
-  return axios({
-    method: 'get',
-    url: `https://notifyme.netlify.com/.netlify/functions/get-url-by-username?username=${username}`,
-  })
-    .then((response) => {
-      let url = response.data
+  console.log(event.headers)
 
-      // Send a POST request
+
+  return getObjectByUsernameAndCollection(username, 'urls')
+    .then(urlObject => {
+      const url = urlObject['url']
+
+      // remove host header
+      delete event.headers.host
+
+      // Send a POST request to the found url
       return axios({
         method: 'post',
         url: url,
-        headers: event.headers
+        headers: event.headers,
       })
         .then((response) => {
           console.log(`--Webhook post message succesfully forwarded to ${url}`);
-          return callback(null, {
-            statusCode: 200,
-            message: `--Webhook post message succesfully forwarded to ${url}`
+
+          // log the event
+          createDocument('webhookhistory', {
+            data: {
+              webhook: event,
+              to: url,
+              timestamp: Date.now(),
+              username: username
+            }
           })
-        })
-        .catch((response) => {
-          console.log(`error in forwarding request: ${response}`);
-          return callback(null, {
-            statusCode: 400,
-            message: `error in forwarding request: ${response}`
-          })
+            .then(result => {
+              return callbackPackager(callback, 200, { success: `forwarded from ${event.host} to ${url}, and logged` })
+            })
         })
     })
-    .catch((response) => {
-      console.log(`error in getting username: ${response}`);
-      return callback(null, {
-        statusCode: 400,
-        message: `error in getting username: ${response}`
-      })
+    .catch(err => {
+      console.log("**err:", err)
+      callbackPackager(callback, 500, { error: `error in forwarding the request to ${url}:`, err })
     })
 
 
