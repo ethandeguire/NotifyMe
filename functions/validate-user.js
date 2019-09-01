@@ -28,7 +28,7 @@ const client = new faunadb.Client({
 })
 
 
-const _headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'}
+const _headers = { 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'}
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
