@@ -37,11 +37,8 @@ exports.handler = (event, context, callback) => {
   // console.log(event, context)
 
   if (event.httpMethod == 'OPTIONS') {
-    return callback(null, {
-      statusCode: 200,
-      headers: _headers,
-      body: JSON.stringify("OPTIONS REQUEST RETURN")
-    })
+    return callbackPackager(callback, 200, { success: "OPTIONS request" })
+
   }
 
   let reqUsername, reqPassword
@@ -50,11 +47,7 @@ exports.handler = (event, context, callback) => {
     reqPassword = event.headers.password
   } catch (err) {
     console.log('-err', err)
-    return callback(null, {
-      statusCode: 400,
-      headers: _headers,
-      body: JSON.stringify(err)
-    })
+    return callbackPackager(callback, 400, { error: err })
   }
 
   // tell the console:
@@ -84,43 +77,40 @@ exports.handler = (event, context, callback) => {
                 data: { data: { username: reqUsername } }
               })
                 .then((response) => {
-                  console.log(`validated user '${reqUsername}' with token '${response.data.data.session_token}'`)
-                  return callback(null, {
-                    statusCode: 200,
-                    headers: _headers,
-                    body: JSON.stringify(response.data) // this contains the session_key
-                  })
+                  if (!response["data"]["data"]["session_token"]) callbackPackager(callback, 500, { error: response })
+                  console.log(`validated user '${reqUsername}' with token '${response["data"]["data"]["session_token"]}'`)
+                  return callbackPackager(callback, 200, response.data)
                 })
                 .catch((error) => {
-                  console.log("error:", error)
-                  return callbackError(callback, 500, error)
+                  console.log("error:", err)
+                  return callbackPackager(callback, 500, { error: err })
                 })
             }
 
             // if password is incorrect
             else if (reqUsername == obj.data.username && reqPassword != obj.data.password) {
               console.log(`Bad password for user: ${reqUsername}. Passwords: ${reqPassword}, ${obj.data.password}`)
-              return callbackError(callback, 400, {error: "Password is incorrect for this user"})
+              return callbackPackager(callback, 400, { error: "Password is incorrect for this user" })
             }
           }
 
           // then username does not exist:
-          return callbackError(callback, 400, {error: "Username does not exist"}) // bad request
+          return callbackPackager(callback, 400, { error: "Username does not exist" }) // bad request
 
         })
         .catch((error) => { // internal server error
           console.log('--error', error)
-          return callbackError(callback, 500, error)
+          return callbackPackager(callback, 500, { error: error })
         })
     })
     .catch((error) => { // internal server error
       console.log('--error', error)
-      return callbackError(callback, 500, error)
+      return callbackPackager(callback, 500, { error: error })
     })
 }
 
 
-function callbackError(callback, statCode, errObj) {
+function callbackPackager(callback, statCode, errObj) {
   return callback(null, {
     statusCode: statCode,
     headers: _headers,

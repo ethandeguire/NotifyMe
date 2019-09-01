@@ -17,21 +17,14 @@ export default class Login extends React.Component {
       method: 'POST',
       headers: { 'username': this.state.email, 'password': this.state.password }
     })
-      .then(response => {
-        console.log(response)
-        if (response.ok) return response.json()
-        else {
-          console.log("failed to make network connection")
-        }
-      })
+      .then(response => response.json())
       .then(res => {
+        if (res["error"]) throw new Error(res["error"])
         console.log('session_token:', res["data"]["session_token"])
         localStorage.setItem('session_token', res["data"]["session_token"])
-
       })
       .catch((error) => {
-        console.log("an error occured:")
-        console.log(error)
+        console.log("an error occured:", error)
       })
 
   }
