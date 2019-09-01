@@ -36,6 +36,7 @@ export default class Login extends React.Component {
     console.log("STARTING FETCH NOW")
     fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'username': this.state.email, 'password': this.state.password }
     })
       .then(response => response.json())

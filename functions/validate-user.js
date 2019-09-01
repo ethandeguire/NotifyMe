@@ -53,7 +53,7 @@ exports.handler = (event, context, callback) => {
     return callback(null, {
       statusCode: 400,
       headers: _headers,
-      message: JSON.stringify(err)
+      body: JSON.stringify(err)
     })
   }
 
@@ -117,7 +117,7 @@ exports.handler = (event, context, callback) => {
           return callback(null, {
             statusCode: 400,
             headers: _headers,
-            message: JSON.stringify(error)
+            body: JSON.stringify(error)
           })
         })
     })
@@ -126,7 +126,7 @@ exports.handler = (event, context, callback) => {
       return callback(null, {
         statusCode: 400,
         headers: _headers,
-        message: JSON.stringify(error)
+        body: JSON.stringify(error)
       })
     })
 }
