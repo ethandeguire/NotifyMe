@@ -28,7 +28,7 @@ const client = new faunadb.Client({
 })
 
 
-const _headers = { 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*'}
+const _headers = { 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': '*', 'Content-Type': '*' }
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
@@ -36,7 +36,7 @@ exports.handler = (event, context, callback) => {
   console.log('0-0-0-0-0-0-0-0-0-0-0-0')
   // console.log(event, context)
 
-  if (event.httpMethod == 'OPTIONS'){
+  if (event.httpMethod == 'OPTIONS') {
     return callback(null, {
       statusCode: 200,
       headers: _headers,
@@ -48,7 +48,7 @@ exports.handler = (event, context, callback) => {
   try {
     reqUsername = event.headers.username
     reqPassword = event.headers.password
-  } catch (err){
+  } catch (err) {
     console.log('-err', err)
     return callback(null, {
       statusCode: 400,
@@ -93,41 +93,37 @@ exports.handler = (event, context, callback) => {
                 })
                 .catch((error) => {
                   console.log("error:", error)
-                  return callback('error', {
-                    statusCode: 400,
-                    headers: _headers,
-                    body: JSON.stringify(error)
-                  })
+                  return callbackError(callback, 500, error)
                 })
             }
 
             // if password is incorrect
             else if (reqUsername == obj.data.username && reqPassword != obj.data.password) {
               console.log(`Bad password for user: ${reqUsername}. Passwords: ${reqPassword}, ${obj.data.password}`)
-              return callback(null, {
-                statusCode: 400,
-                headers: _headers,
-                body: `Bad password for user: ${reqUsername}`
-              })
-            } ``
+              return callbackError(callback, 400, {error: "Password is incorrect for this user"})
+            }
           }
+
+          // then username does not exist:
+          return callbackError(callback, 400, {error: "Username does not exist"}) // bad request
+
         })
-        .catch((error) => {
+        .catch((error) => { // internal server error
           console.log('--error', error)
-          return callback(null, {
-            statusCode: 400,
-            headers: _headers,
-            body: JSON.stringify(error)
-          })
+          return callbackError(callback, 500, error)
         })
     })
-    .catch((error) => {
+    .catch((error) => { // internal server error
       console.log('--error', error)
-      return callback(null, {
-        statusCode: 400,
-        headers: _headers,
-        body: JSON.stringify(error)
-      })
+      return callbackError(callback, 500, error)
     })
 }
 
+
+function callbackError(callback, statCode, errObj) {
+  return callback(null, {
+    statusCode: statCode,
+    headers: _headers,
+    body: JSON.stringify(errObj)
+  })
+}
