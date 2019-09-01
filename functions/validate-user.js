@@ -94,7 +94,7 @@ exports.handler = (event, context, callback) => {
                 .catch((error) => {
                   console.log("error:", error)
                   return callback('error', {
-                    statusCode: 200,
+                    statusCode: 400,
                     headers: _headers,
                     body: JSON.stringify(error)
                   })
@@ -105,7 +105,7 @@ exports.handler = (event, context, callback) => {
             else if (reqUsername == obj.data.username && reqPassword != obj.data.password) {
               console.log(`Bad password for user: ${reqUsername}. Passwords: ${reqPassword}, ${obj.data.password}`)
               return callback(null, {
-                statusCode: 200,
+                statusCode: 400,
                 headers: _headers,
                 body: `Bad password for user: ${reqUsername}`
               })

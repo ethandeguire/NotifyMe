@@ -6,40 +6,22 @@ import "./../styles/login.css";
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      email: "",
-      password: ""
-    };
+    this.state = { email: '', password: '' };
   }
 
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
+  mySubmitHandler = (event) => {
+    event.preventDefault();
 
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
-  handleSubmit = event => {
-    //steps:
-    // attempt login
-    // if valid:
-    //  store validation key and other data in FaunaDB
-    //  store validation key in session data 
-    //  redirect to user dashboard page
-    // if not valid:
-    // return login failed
-
-    console.log("STARTING FETCH NOW")
+    // send request
     fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
       method: 'POST',
-      credentials: 'include',
       headers: { 'username': this.state.email, 'password': this.state.password }
     })
-      .then(response => response.json())
+      .then(response => {
+        console.log(response)
+        if (response.ok) return response.json()
+        
+      })
       .then(res => {
         console.log('session_token:', res["data"]["session_token"])
         localStorage.setItem('session_token', res["data"]["session_token"])
@@ -48,41 +30,43 @@ export default class Login extends React.Component {
       .catch((error) => {
         console.log("ERROR:", error)
       })
-    
+  }
+
+  myChangeHandler = (event) => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
   }
 
   render() {
     return (
-      <div className="container">
-        <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="email" bssize="large">
-            <FormLabel>Email</FormLabel>
-            <FormControl
-              autoFocus
-              type="email"
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="password" bssize="large">
-            <FormLabel>Password</FormLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
-            />
-          </FormGroup>
-          <Button
-            block
-            bssize="large"
-            disabled={!this.validateForm()}
-            type="submit"
-            className="button"
-          >
-            Login
-          </Button>
-        </form>
-      </div>
+      <form onSubmit={this.mySubmitHandler} className="container">
+        <div className="input">
+          Email
+          <input
+            className="input"
+            type='text'
+            id='email'
+            onChange={this.myChangeHandler}
+          />
+        </div>
+
+
+        <div className="input">
+          Password
+          <input
+            className="input"
+            type='text' // type='password'
+            id='password'
+            onChange={this.myChangeHandler}
+          />
+        </div>
+
+        <input
+          className="button"
+          type='submit'
+        />
+      </form>
     );
   }
 }
