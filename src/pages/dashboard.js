@@ -6,26 +6,20 @@ import SEO from "../components/seo"
 import "./../styles/dashboard.css";
 import "./../styles/buttons.css";
 
+import Dashboard from "../components/dashboard"
+
 const dashboardPage = () => (
+
+
   <Layout>
     <SEO title="Home" />
-
+    
 
     <h1>Welcome to the dashboard, !</h1>
     <h3>Get started with desktop notifications here:</h3>
-    
-    <h4>Your webhook notification url is:</h4>
 
-    <div className="url"> https://notifyme.netlify.com/.netlify/functions/notif?{localStorage.getItem('email')}
-      <button
-        className="copybutton"
-        onClick={() => {
-          navigator.clipboard.writeText(
-            `https://notifyme.netlify.com/.netlify/functions/notif?${localStorage.getItem('email')}`
-          )
-        }}>
-        Copy to clipboard
-      </button>
+    <div>
+      <Dashboard />
     </div>
 
     <p></p>

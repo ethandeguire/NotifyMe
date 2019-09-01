@@ -45,3 +45,15 @@
   margin: 0px 10px;
   font-style: normal;
 }
+
+.copybutton:hover {
+	background-color:#8E7BCC;
+}
+.copybutton:active {
+	position:relative;
+	top:1px;
+}
+
+.copybutton:disabled {
+	background-color: #13063C;
+}
