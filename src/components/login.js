@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
-import { Redirect } from 'react-router-dom';
+import { navigate } from 'gatsby';
 import "./../styles/login.css";
+import "./../styles/buttons.css";
 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', password: '' };
+    this.state = { email: '', password: '', errorbox: '' };
   }
 
   mySubmitHandler = (event) => {
@@ -19,12 +19,27 @@ export default class Login extends React.Component {
     })
       .then(response => response.json())
       .then(res => {
+        // check if we recieved an error
         if (res["error"]) throw new Error(res["error"])
-        console.log('session_token:', res["data"]["session_token"])
+
+        // clear any error messages:
+        this.setState((state) => ({ errorbox: '' }))
+
+        localStorage.clear() // clear the current user info
+
+        // store the user data into the dashboard
         localStorage.setItem('session_token', res["data"]["session_token"])
+        localStorage.setItem('email', this.state.email)
+
+        // send to the dashboard
+        navigate("/dashboard/")
       })
       .catch((error) => {
-        console.log("an error occured:", error)
+        // console.log(error.message)
+        // console.log(Object.keys(error), Object.values(error), JSON.stringify(error))
+        if (error.message == "Password is incorrect for this user" || error.message == "Username does not exist") this.setState((state) => ({ errorbox: error.message }))
+        // console.log("An unkown error occured:", typeof error , Object.keys(error))
+        this.state.errorbox = error.message
       })
 
   }
@@ -59,10 +74,14 @@ export default class Login extends React.Component {
           />
         </div>
 
+        <p className="errorText">{this.state.errorbox}</p>
+
         <input
-          className="button"
+          className="purplebutton"
           type='submit'
         />
+
+
       </form>
     );
   }

@@ -23,32 +23,11 @@
 	overflow-x: hidden
 }
 
-.button {
-	background-color:#452E90;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #452E90;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:19px;
-	font-weight:bold;
-	padding:6px 24px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #000000;
-	margin: 10px 0px 0px 0px;
-}
-
-.button:hover {
-	background-color:#8E7BCC;
-}
-.button:active {
-	position:relative;
-	top:1px;
-}
-
-.button:disabled {
-	background-color: #13063C;
+.errorText {
+	color: black;
+	text-align: center;
+	padding: 0px;
+	margin: 0px;
+	background: darkgray;
+	border-radius: 2200px;
 }

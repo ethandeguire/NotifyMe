@@ -1,25 +1,4 @@
-// ------ Definitions ------
-//
-// JSON Input Data:
-//  {
-//    data: {
-//      username: "{username}",
-//      session_token: "{TOKEN}"
-//    }
-//  } 
-//
-//
-// JSON Return Data:
-//  {
-//    data: {
-//      is_valid: {BOOLEAN}
-//    }
-//  }
-//
-// ------ /Definitions -----
-
 import faunadb from 'faunadb' // Import faunaDB sdk
-import Axios from 'axios';
 
 // configure faunaDB Client with our secret
 const q = faunadb.query
@@ -58,7 +37,10 @@ exports.handler = (event, context, callback) => {
                   statusCode: 200,
                   body: {
                     data: {
-                      is_valid: true
+                      is_valid: true,
+                      name: obj.data.name,
+                      email: obj.data.email,
+                      url: obj.data.url
                     }
                   }
                 })

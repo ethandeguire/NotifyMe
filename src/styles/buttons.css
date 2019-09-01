@@ -1,0 +1,47 @@
+.purplebutton {
+	background-color:#452E90;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #452E90;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:19px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
+	margin: 10px 0px 0px 0px;
+}
+
+.purplebutton:hover {
+	background-color:#8E7BCC;
+}
+.purplebutton:active {
+	position:relative;
+	top:1px;
+}
+
+.purplebutton:disabled {
+	background-color: #13063C;
+}
+
+.copybutton {
+  background-color:#452E90;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #452E90;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:19px;
+	padding:2px 10px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
+  margin: 0px 10px;
+  font-style: normal;
+}

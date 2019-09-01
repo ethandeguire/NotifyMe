@@ -1,0 +1,13 @@
+.url {
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+  border-radius: 50px;
+  margin: 2px 0px;
+  padding: 3px 8px;
+  border: #452E90;
+  border-width: 2px;
+  border-style: solid;
+  text-align: center;
+  font-style: italic;
+}
