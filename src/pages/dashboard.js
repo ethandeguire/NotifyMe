@@ -10,6 +10,7 @@ const dashboardPage = () => (
   <Layout>
     <SEO title="Home" />
 
+
     <h1>Welcome to the dashboard, !</h1>
     <h3>Get started with desktop notifications here:</h3>
     

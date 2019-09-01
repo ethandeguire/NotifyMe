@@ -1,14 +1,13 @@
-
+// dependencies:
 const faunadb = require('faunadb') // Import faunaDB sdk
 const crypto = require('crypto')
 
-
 // configure faunaDB Client with our secret
 const q = faunadb.query
-const client = new faunadb.Client({
-  secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9'
-})
+const client = new faunadb.Client({ secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9' })
 
+
+// ----------------- helper functions -----------------
 // sends a callback with a status code and the required headers
 const callbackPackager = (callback, statCode, errObj) => {
   return callback(null, {
@@ -34,7 +33,7 @@ const getAllObjectsInCollection = (collection) => {
       return client.query(getAllDataQuery)
         .then((objects) => {
 
-          for (let i = 0; i < refs.length; i++){
+          for (let i = 0; i < refs.length; i++) {
             objects[i]['data']['ref'] = refs[i]
           }
 
