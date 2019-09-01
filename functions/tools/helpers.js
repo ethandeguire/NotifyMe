@@ -50,7 +50,7 @@ const getObjectByUsernameAndCollection = (searchUsername, collection) => {
   console.log('--getObjectByUsernameAndCollection invoked')
   return getAllObjectsInCollection(collection)
     .then((objects) => {
-      
+
       for (let i = 0; i < objects.length; i++) {
 
         // return the object if the username matches
@@ -60,6 +60,23 @@ const getObjectByUsernameAndCollection = (searchUsername, collection) => {
       }
 
       return null
+    })
+}
+
+const getAllObjectsByUsernameAndCollection = (searchUsername, collection) => {
+  return getAllObjectsInCollection(collection)
+    .then(objects => {
+      // create a list of objects
+      let returnObjects = []
+
+      // add any objects with the same username to the return list
+      for (let i = 0; i < objects.length; i++) {
+        console.log('***', objects[i]['data']['username'], searchUsername, objects.length, i)
+        if (objects[i]['data']['username'] == searchUsername) returnObjects.push(objects[i])
+      }
+
+      // return the list
+      return returnObjects
     })
 }
 
@@ -117,6 +134,7 @@ const updateDocument = (ref, document) => {
 exports.callbackPackager = callbackPackager
 exports.getAllDBObjectsInCollection = getAllObjectsInCollection
 exports.getObjectByUsernameAndCollection = getObjectByUsernameAndCollection
+exports.getAllObjectsByUsernameAndCollection = getAllObjectsByUsernameAndCollection
 exports.addAuthenticationByUsername = addAuthenticationByUsername
 exports.createDocument = createDocument
 exports.updateDocument = updateDocument

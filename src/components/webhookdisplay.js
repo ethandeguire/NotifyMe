@@ -6,15 +6,33 @@ import "./../styles/webhooks.css"
 export default class webhookdisplay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', name: '', pastwebhooks: [{ from: 'sender', to: 'reciever' }, { from: 'john', to: 'stacy' }, {from: 'mom', to: 'dad'}] };
+    this.state = { email: '', name: '', pastwebhooks: [{ from: 'sender', to: 'reciever' }, { from: 'john', to: 'stacy' }, { from: 'mom', to: 'dad' }] };
     // this.state = { email: '', name: '', pastwebhooks: [] };
 
   };
 
+  getPastWebhooks = () => {
+    console.log('test')
+    return fetch(`https://notifyme.netlify.com/.netlify/functions/get-users-webhook-history/username=${this.state.email}`, {
+      method: 'POST',
+    })
+      .then(response => response.json())
+      .then(res => {
+        // check if we recieved an error
+        if (res["error"]) console.log(res['error'])
+        else {
+          console.log(res)
+        }
+        
 
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 
   showWebhooks() {
-    if (this.state.pastwebhooks.length == 0){
+    if (this.state.pastwebhooks.length == 0) {
       return <p><i>You haven't recieved any webhooks yet. Get started using the link above!</i></p>
     }
 
@@ -32,11 +50,13 @@ export default class webhookdisplay extends React.Component {
   render() {
     return (
       <div className='allwebhooks'>
-        <h4>Past Webhooks:</h4>
-          {this.showWebhooks()}
-          <br/><br/><br/><br/><br/><br/>
+        <h4>Past Webhooks (test):</h4>
+        <button className='purplebutton' onClick={this.getPastWebhooks} > Button </button>
+        <br/><br/>
+        {this.showWebhooks()}
+        <br /><br /><br /><br /><br /><br />
       </div>
-      
+
     )
   }
 }

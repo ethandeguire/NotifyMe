@@ -33,7 +33,7 @@
     "bootstrap": "node ./functions/scripts/bootstrap-fauna-database.js",
     "docs": "md-magic --path '**/*.md' --ignore 'node_modules'",
     "checkForFaunaKey": "node ./functions/scripts/check-for-fauna-key.js",
-    "start": "npm-run-all --parallel checkForFaunaKey create-collections start:app start:server build:gatsby",
+    "start": "npm-run-all --parallel checkForFaunaKey create-collections start:server build:gatsby",
     "start:server": "netlify-lambda serve functions -c ./webpack.config.js",
     "prebuild": "echo 'setup faunaDB' && npm install && npm run bootstrap",
     "build": "npm-run-all --parallel build:**",

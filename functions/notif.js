@@ -61,7 +61,7 @@ exports.handler = (event, context, callback) => {
     })
     .catch(err => {
       console.log("**err:", err)
-      callbackPackager(callback, 500, { error: `error in forwarding the request to ${url}:`, err })
+      callbackPackager(callback, 500, { error: err })
     })
 
 
