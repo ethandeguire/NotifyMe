@@ -15,33 +15,34 @@ export default class Webhookdisplay extends React.Component {
     this.setState((state) => {
       this.state.email = localStorage.getItem('email')
 
+      console.log("***", `notifyme.netlify.com/.netlify/functions/get-users-webhook-history?username=${this.state.email}`)
       return fetch(`https://notifyme.netlify.com/.netlify/functions/get-users-webhook-history?username=${this.state.email}`, {
         method: 'POST'
       })
         .then(response => response.json())
         .then(res => {
           // check if we recieved an error
-          if (res["error"]) console.log('***error:', res['error'])
+          if (res["error"]) console.log(res['error'])
           else {
-            let newPastWebhooks = []
-
-            for (let i = 0; i < res.webhooks.length; i++) {
-              const to = res['webhooks'][i]['data']['to']
-              const from = res["webhooks"][i]['data']['webhook']["headers"]["user-agent"]
-              newPastWebhooks.push({ to: to, from: from })
-            }
-
+            console.log("result:", this.state.email, res)
             this.setState((state) => {
-              return { pastwebhooks: newPastWebhooks }
-            }, () => {
-              this.showWebhooks()
-            });
+              this.state.pastwebhooks = []
+              for (let i = 0; i < res.webhooks.length; i++){
+                console.log(res.webhooks[i])
+                let to = res['webhooks'][i]['data']['to']
+                let from = res["webhooks"][i]['data']['webhook']["headers"]["user-agent"]
+                this.state.pastwebhooks.push({to:to, from:from})
+                console.log(to, from)
+              }
+              
+              this.showWebhooks() 
+            })
           }
         })
         .catch((error) => {
           console.log("**Error:", error)
         })
-    })
+      })
   }
 
   showWebhooks() {
