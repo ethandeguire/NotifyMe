@@ -44,7 +44,7 @@ export default class Login extends React.Component {
 
   signup = () => {
     // send request
-    fetch('http://localhost:9000/.netlify/functions/sign-up', {
+    fetch('https://notifyme.netlify.com/.netlify/functions/sign-up', {
       method: 'POST',
       headers: { 'username': this.state.email, 'password': this.state.password }
     })
@@ -81,7 +81,7 @@ export default class Login extends React.Component {
     event.preventDefault();
   }
 
-  
+
 
   render() {
     return (

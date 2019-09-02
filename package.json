@@ -32,7 +32,7 @@
     "checkForFaunaKey": "node ./functions/scripts/check-for-fauna-key.js",
     "start": "npm-run-all --parallel checkForFaunaKey create-collections start:server build:gatsby",
     "start:server": "netlify-lambda serve functions -c ./webpack.config.js",
-    "prebuild": "echo 'setup faunaDB' && npm install && npm run bootstrap",
+    "prebuild": "echo 'setup faunaDB' && npm install && npm run bootstrap && npm run create-collections",
     "build": "npm-run-all --parallel build:**",
     "build:functions": "netlify-lambda build functions -c ./webpack.config.js",
     "build:gatsby": "gatsby build",
