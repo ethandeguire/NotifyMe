@@ -55,7 +55,12 @@ exports.handler = (event, context, callback) => {
             }
           })
             .then(response => {
+              console.log(`--Webhook post message succesfully logged in 'webhookhistory'`);
               return callbackPackager(callback, 200, { success: `${response.statusCode} forwarded from ${event.host} to ${url}, and logged` })
+            })
+            .catch(err => {
+              console.log(`--Error in loggin the request:`, err)
+              return callbackPackager(callback, 500, { error: err })
             })
         })
     })
