@@ -26,15 +26,12 @@ exports.handler = (event, context, callback) => {
 
   const username = params["username"]
 
-  console.log(event.headers)
-
-
   return getObjectByUsernameAndCollection(username, 'urls')
     .then(urlObject => {
       const url = urlObject['url']
 
       // remove host header
-      delete event.headers.host
+      // delete event.headers.host
 
       // Send a POST request to the found url
       return axios({
