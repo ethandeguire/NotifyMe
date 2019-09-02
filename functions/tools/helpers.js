@@ -71,7 +71,6 @@ const getAllObjectsByUsernameAndCollection = (searchUsername, collection) => {
 
       // add any objects with the same username to the return list
       for (let i = 0; i < objects.length; i++) {
-        console.log('***', objects[i]['data']['username'], searchUsername, objects.length, i)
         if (objects[i]['data']['username'] == searchUsername) returnObjects.push(objects[i])
       }
 

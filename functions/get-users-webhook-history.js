@@ -10,8 +10,6 @@ const axios = require('axios');
 const helpers = require('./tools/helpers')
 const callbackPackager = helpers.callbackPackager
 const getAllObjectsByUsernameAndCollection = helpers.getAllObjectsByUsernameAndCollection
-const createDocument = helpers.createDocument
-
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {

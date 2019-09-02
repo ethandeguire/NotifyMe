@@ -9,8 +9,6 @@ const client = new faunadb.Client({
 const collections = ["urls", "authentications", "webhookhistory"]
 let errors = []
 
-console.log("****SECRET****", process.env.FAUNADB_SERVER_SECRET)
-
 collections.forEach(collection => {
   console.log("*** Creating collection", collection)
   client.query(q.CreateCollection({ name: collection }))

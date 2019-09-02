@@ -13,10 +13,20 @@ export default class dashboard extends React.Component {
   }
 
   componentDidMount() {
-    this.setState((state) => this.state.email = localStorage.getItem('email'))
+    if (localStorage.getItem('email') !== null && localStorage.getItem('session_token') !== null) {
+      // verify session token
+      this.setState((state) => {
+        return { email: localStorage.getItem('email') }
+      })
+    }
+    else {
+      navigate("/authenticate/")
+    }
   }
 
-
+  getEmail() {
+    return localStorage.getItem('email')
+  }
 
   render() {
     return (
@@ -42,7 +52,7 @@ export default class dashboard extends React.Component {
 
         <br /><br />
 
-        <Webhookdisplay email={this.state.email}></Webhookdisplay>
+        <Webhookdisplay email={this.getEmail()}></Webhookdisplay>
 
         <br />
 
