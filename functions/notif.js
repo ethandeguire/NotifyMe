@@ -18,12 +18,13 @@ exports.handler = (event, context, callback) => {
   // tell the console:
   console.log(`--Function 'notif' invoked`)
 
+  if (event.httpMethod == 'OPTIONS') return callbackPackager(callback, 200, { success: "OPTIONS request" })
+
   let params = event.queryStringParameters
   if (!params["username"]) {
     console.log("'username' query parameter must be included in post request")
     return callbackPackager(callback, 400, { error: "'username' query parameter must be included in post request" })
   }
-
   const username = params["username"]
 
   return getObjectByUsernameAndCollection(username, 'urls')
@@ -31,7 +32,7 @@ exports.handler = (event, context, callback) => {
       const url = urlObject['url']
 
       // remove host header
-      // delete event.headers.host
+      delete event.headers.host
 
       // Send a POST request to the found url
       return axios({
@@ -40,6 +41,8 @@ exports.handler = (event, context, callback) => {
         headers: event.headers,
       })
         .then((response) => {
+          console.log("***response:", response)
+
           console.log(`--Webhook post message succesfully forwarded to ${url}`);
 
           // log the event
