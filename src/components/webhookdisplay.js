@@ -33,10 +33,14 @@ export default class Webhookdisplay extends React.Component {
 
             //  loop through hooks backwards to display most recent ones first
             for (let i = res.webhooks.length - 1; i >= 0; i--) {
-              const to = res['webhooks'][i]['data']['to']
+              // const to = res['webhooks'][i]['data']['to']
+              const to = `${res['webhooks'][i]['data']['computer_name']} - ${res['webhooks'][i]['data']['computer_os']}` 
+              if (!res['webhooks'][i]['data']['computer_name']) to = res['webhooks'][i]['data']['to'] || 'unknown'
               const from = res["webhooks"][i]['data']['webhook']["headers"]["user-agent"]
+              
               const timeInMS = res["webhooks"][i]['data']['timestamp'] / 1000
               const datetime = new Date(res["webhooks"][i]['data']['timestamp'] / 1000).toLocaleDateString("en-US", { weekday: 'short', year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
 
               let timeAgoInS = Math.round((Date.now() - timeInMS) / 1000)
               let timeAgoInM = Math.round(timeAgoInS / 60)

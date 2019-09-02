@@ -41,6 +41,7 @@ exports.handler = (event, context, callback) => {
         headers: event.headers,
       })
         .then((response) => {
+          console.log(response.data.data.client_info)
 
           console.log(`--Webhook post message succesfully forwarded to ${url}`);
 
@@ -50,7 +51,9 @@ exports.handler = (event, context, callback) => {
               webhook: event,
               to: url,
               timestamp: Date.now(),
-              username: username
+              username: username,
+              computer_name: response['data']['data']['client_info']['computer_name'],
+              computer_os: response['data']['data']['client_info']['os']
             }
           })
             .then(response => {
