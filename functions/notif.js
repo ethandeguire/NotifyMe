@@ -54,8 +54,8 @@ exports.handler = (event, context, callback) => {
               username: username
             }
           })
-            .then(result => {
-              return callbackPackager(callback, 200, { success: `forwarded from ${event.host} to ${url}, and logged` })
+            .then(response => {
+              return callbackPackager(callback, 200, { success: `${response.statusCode} forwarded from ${event.host} to ${url}, and logged` })
             })
         })
     })

@@ -3,31 +3,45 @@ import "./../styles/login.css";
 import "./../styles/buttons.css"
 import "./../styles/webhooks.css"
 
-export default class webhookdisplay extends React.Component {
+export default class Webhookdisplay extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { email: '', name: '', pastwebhooks: [{ from: 'sender', to: 'reciever' }, { from: 'john', to: 'stacy' }, { from: 'mom', to: 'dad' }] };
-    // this.state = { email: '', name: '', pastwebhooks: [] };
+    // this.state = { email: '', pastwebhooks: [{ from: 'sender', to: 'reciever' }, { from: 'john', to: 'stacy' }, { from: 'mom', to: 'dad' }] };
+    this.state = { email: '', name: '', pastwebhooks: [] };
 
   };
 
   getPastWebhooks = () => {
-    console.log('test')
-    return fetch(`https://notifyme.netlify.com/.netlify/functions/get-users-webhook-history/username=${this.state.email}`, {
-      method: 'POST',
-    })
-      .then(response => response.json())
-      .then(res => {
-        // check if we recieved an error
-        if (res["error"]) console.log(res['error'])
-        else {
-          console.log(res)
-        }
-        
+    this.setState((state) => {
+      this.state.email = localStorage.getItem('email')
 
+      console.log("***", `notifyme.netlify.com/.netlify/functions/get-users-webhook-history?username=${this.state.email}`)
+      return fetch(`https://notifyme.netlify.com/.netlify/functions/get-users-webhook-history?username=${this.state.email}`, {
+        method: 'POST'
       })
-      .catch((error) => {
-        console.log(error)
+        .then(response => response.json())
+        .then(res => {
+          // check if we recieved an error
+          if (res["error"]) console.log(res['error'])
+          else {
+            console.log("result:", this.state.email, res)
+            this.setState((state) => {
+              this.state.pastwebhooks = []
+              for (let i = 0; i < res.webhooks.length; i++){
+                console.log(res.webhooks[i])
+                let to = res['webhooks'][i]['data']['to']
+                let from = res["webhooks"][i]['data']['webhook']["headers"]["user-agent"]
+                this.state.pastwebhooks.push({to:to, from:from})
+                console.log(to, from)
+              }
+              
+              this.showWebhooks() 
+            })
+          }
+        })
+        .catch((error) => {
+          console.log("**Error:", error)
+        })
       })
   }
 
@@ -52,7 +66,7 @@ export default class webhookdisplay extends React.Component {
       <div className='allwebhooks'>
         <h4>Past Webhooks (test):</h4>
         <button className='purplebutton' onClick={this.getPastWebhooks} > Button </button>
-        <br/><br/>
+        <br /><br />
         {this.showWebhooks()}
         <br /><br /><br /><br /><br /><br />
       </div>
