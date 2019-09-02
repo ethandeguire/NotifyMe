@@ -22,14 +22,14 @@ const createDocument = helpers.createDocument
 exports.handler = (event, context, callback) => {
 
   const data = JSON.parse(event.body)["data"]
-  const [username, password, url] = [data["username"], data["password"], data["url"]]
+  const [username, password, url, computer_name] = [data["username"], data["password"], data["url"], data['computer_name']]
 
-  
+
 
   return getObjectByUsernameAndCollection(username, 'urls')
     .then((urlObject) => {
 
-      console.log('*****',username, password, url)
+      console.log('*****', username, password, url)
 
       // if we found a user by that username
       if (urlObject != null) {
@@ -41,7 +41,7 @@ exports.handler = (event, context, callback) => {
         if (password == urlObject["password"]) {
 
           // update the url in fauna
-          return updateDocument(urlObject.ref, { data: { url: url } })
+          return updateDocument(urlObject.ref, { data: { url: url, computer_name: computer_name } })
             .then((returnVal) => {
               console.log(`--Updated url of user: ${username} to ${url}`)
               return callbackPackager(callback, 200, { data: returnVal.data })
@@ -52,7 +52,7 @@ exports.handler = (event, context, callback) => {
       // if we didnt find a user by that username
       else {
         console.log(`--Username does not exist, creating a new account for ${username}`)
-        return createDocument('urls', {data: data})
+        return createDocument('urls', { data: data })
           .then((response) => { return callbackPackager(callback, 200, { data: data }) })
       }
 

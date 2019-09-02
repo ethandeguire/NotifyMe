@@ -7,7 +7,7 @@ export default class Webhookdisplay extends React.Component {
   constructor(props) {
     super(props);
     // this.state = { email: '', pastwebhooks: [{ from: 'sender', to: 'reciever' }, { from: 'john', to: 'stacy' }, { from: 'mom', to: 'dad' }] };
-    this.state = { email: '', name: '', pastwebhooks: [] };
+    this.state = { email: '', name: '', pastwebhooks: [], timeago: '' };
 
   };
 
@@ -31,11 +31,34 @@ export default class Webhookdisplay extends React.Component {
           else {
             let newPastWebhooks = []
 
-            for (let i = 0; i < res.webhooks.length; i++) {
+            //  loop through hooks backwards to display most recent ones first
+            for (let i = res.webhooks.length - 1; i >= 0; i--) {
               const to = res['webhooks'][i]['data']['to']
               const from = res["webhooks"][i]['data']['webhook']["headers"]["user-agent"]
-              newPastWebhooks.push({ to: to, from: from })
+              const timeInMS = res["webhooks"][i]['data']['timestamp'] / 1000
+              const datetime = new Date(res["webhooks"][i]['data']['timestamp'] / 1000).toLocaleDateString("en-US", { weekday: 'short', year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+              let timeAgoInS = Math.round((Date.now() - timeInMS) / 1000)
+              let timeAgoInM = Math.round(timeAgoInS / 60)
+              let timeAgoInH = Math.round(timeAgoInS / 60 / 60)
+              let timeAgoInD = Math.round(timeAgoInS / 60 / 60 / 24)
+              let timeAgoInMo = Math.round(timeAgoInS / 60 / 60 / 24 / 30)
+
+              let timeAgoInUnit = 'some time ago'
+              switch (true) {
+                case (timeAgoInS < 60): timeAgoInUnit = `${timeAgoInS} seconds ago`; break;
+                case (timeAgoInM >= 1 && timeAgoInM < 60): timeAgoInUnit = `${timeAgoInM} minutes ago`; break;
+                case (timeAgoInH >= 1 && timeAgoInH < 24): timeAgoInUnit = `${timeAgoInH} hours ago`; break;
+                case (timeAgoInD >= 1 && timeAgoInD < 30): timeAgoInUnit = `${timeAgoInD} days ago`; break;
+                case (timeAgoInMo >= 1): timeAgoInUnit = `${timeAgoInMo} months ago`; break;
+              }
+
+              console.log(timeAgoInUnit)
+
+              newPastWebhooks.push({ to: to, from: from, timeago: timeAgoInUnit, datetime: datetime })
             }
+
+            console.log(newPastWebhooks)
 
             this.setState((state) => {
               return { pastwebhooks: newPastWebhooks }
@@ -60,6 +83,7 @@ export default class Webhookdisplay extends React.Component {
       divList.push(<Singlewebhook
         to={this.state.pastwebhooks[i].to}
         from={this.state.pastwebhooks[i].from}
+        timeago={this.state.pastwebhooks[i].timeago}
         key={i}
       />)
     }
@@ -91,6 +115,7 @@ class Singlewebhook extends React.Component {
       <div className='webhookhistorybox'>
         <div className='webhooktextline'>From: <i>{this.props.from}</i> </div>
         <div className='webhooktextline'>To: <i>{this.props.to}</i></div>
+        <div className='webhooktextline'>{this.props.timeago}</div>
       </div >
     )
   }
