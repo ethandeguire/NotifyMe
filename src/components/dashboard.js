@@ -27,12 +27,12 @@ export default class dashboard extends React.Component {
 
         <div>
           <h4>Your webhook notification url is:</h4>
-          <div className="url"> https://notifyme.netlify.com/.netlify/functions/notif?{this.state.email += ''}
+          <div className="url"> https://notifyme.netlify.com/.netlify/functions/notif?username={this.state.email}
             <button
               className="copybutton"
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `https://notifyme.netlify.com/.netlify/functions/notif?${this.state.email}`
+                  `https://notifyme.netlify.com/.netlify/functions/notif?username=${this.state.email}`
                 )
               }}>
               Copy to clipboard

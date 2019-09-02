@@ -11,7 +11,6 @@ import { useStaticQuery, graphql, Link } from "gatsby"
 
 import Header from "./header"
 import "./../styles/layout.css"
-import { Z_BLOCK } from "zlib";
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`

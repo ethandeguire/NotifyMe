@@ -59,7 +59,7 @@ function createFaunaDB(key) {
       console.log(`bootstrap-fauna-database.js -- name:${db.name}, ref:${db.ref}, time:${db.ts}`)
     })
     .catch((err) => {
-      if (err.message === 'instance not unique' || err.message === 'isntance already exists') console.log(`Database '${_DATABASE_NAME}' already exists, good to go`)
+      if (err.message === 'instance not unique' || err.message === 'instance already exists') console.log(`Database '${_DATABASE_NAME}' already exists, good to go`)
       else console.log(`Error in creating database: name:'${err.name}' status:'${err.statuscode}' message:'${err.message}'`)
     })
 }

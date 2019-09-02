@@ -31,7 +31,7 @@ exports.handler = (event, context, callback) => {
     .then(urlObject => {
       const url = urlObject['url']
 
-      // remove host header
+      // remove host header - this is to prevent some cors garbage from disallowing the request
       delete event.headers.host
 
       // Send a POST request to the found url
@@ -55,7 +55,7 @@ exports.handler = (event, context, callback) => {
           })
             .then(response => {
               console.log(`--Webhook post message succesfully logged in 'webhookhistory'`);
-              return callbackPackager(callback, 200, { success: `${response.statusCode} forwarded from ${event.host} to ${url}, and logged` })
+              return callbackPackager(callback, 200, { success: `forwarded webhook from ${event.host} to ${url}, and logged` })
             })
             .catch(err => {
               console.log(`--Error in logging the request:`, err)

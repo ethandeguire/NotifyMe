@@ -624,3 +624,20 @@ pre tt:after {
     font-size: 100%;
   }
 }
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  /* border: 1px solid #452E90; */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #452E90;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #452E90;
+}

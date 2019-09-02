@@ -68,14 +68,13 @@ export default class Webhookdisplay extends React.Component {
 
   render() {
     return (
-      <div className='allwebhooks'>
+      <div>
         <h4>Past Webhooks (test):</h4>
         <button className='purplebutton' onClick={this.getPastWebhooks} > Update </button>
-        <br /><br />
-        {this.showWebhooks()}
-        <br /><br /><br /><br /><br /><br />
+        <div className='allwebhooks'>
+          {this.showWebhooks()}
+        </div>
       </div>
-
     )
   }
 }
