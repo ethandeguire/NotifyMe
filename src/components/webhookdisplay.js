@@ -16,6 +16,8 @@ export default class Webhookdisplay extends React.Component {
   }
 
   getPastWebhooks = () => {
+    console.log("getting webhooks")
+
     this.setState((state) => {
       this.state.email = localStorage.getItem('email')
 

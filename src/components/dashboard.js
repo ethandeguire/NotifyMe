@@ -44,7 +44,7 @@ export default class dashboard extends React.Component {
 
         <Webhookdisplay email={this.state.email}></Webhookdisplay>
 
-        <br /><br />
+        <br />
 
       </div>
     )

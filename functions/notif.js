@@ -41,12 +41,11 @@ exports.handler = (event, context, callback) => {
         headers: event.headers,
       })
         .then((response) => {
-          console.log("***response:", response)
 
           console.log(`--Webhook post message succesfully forwarded to ${url}`);
 
           // log the event
-          createDocument('webhookhistory', {
+          return createDocument('webhookhistory', {
             data: {
               webhook: event,
               to: url,
@@ -59,14 +58,14 @@ exports.handler = (event, context, callback) => {
               return callbackPackager(callback, 200, { success: `${response.statusCode} forwarded from ${event.host} to ${url}, and logged` })
             })
             .catch(err => {
-              console.log(`--Error in loggin the request:`, err)
+              console.log(`--Error in logging the request:`, err)
               return callbackPackager(callback, 500, { error: err })
             })
         })
     })
     .catch(err => {
       console.log("**err:", err)
-      callbackPackager(callback, 500, { error: err })
+      return callbackPackager(callback, 500, { error: err })
     })
 
 

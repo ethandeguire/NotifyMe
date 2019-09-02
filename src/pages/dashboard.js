@@ -9,17 +9,12 @@ import "./../styles/buttons.css";
 import Dashboard from "../components/dashboard"
 
 const dashboardPage = () => (
-
-
   <Layout>
     <SEO title="Home" />
 
     <div>
       <Dashboard />
     </div>
-
-    <br/><br/><br/>
-    <Link to="/">Go back to the homepage</Link>
   </Layout >
 )
 

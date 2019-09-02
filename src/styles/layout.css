@@ -22,11 +22,15 @@ section,
 summary {
   display: block;
 }
+footer {
+  width: 100%;
+}
 audio,
 canvas,
 progress,
 video {
   display: inline-block;
+  box-sizing: border-box;
 }
 audio:not([controls]) {
   display: none;

@@ -7,10 +7,11 @@
 
 import React from "react"
 import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 
 import Header from "./header"
 import "./../styles/layout.css"
+import { Z_BLOCK } from "zlib";
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -36,6 +37,7 @@ const Layout = ({ children }) => {
       >
         <main>{children}</main>
         <footer>
+          <Link to="/">Go back to the homepage</Link><br />
           {new Date().getFullYear()}, Built by
           {` `}
           <a href="https://ethandeguire.info">Ethan DeGuire</a>
