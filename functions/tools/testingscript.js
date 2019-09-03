@@ -10,23 +10,22 @@ const helpers = require('./helpers')
 const deleteDocument = helpers.deleteDocument
 const getAllObjectsInCollection = helpers.getAllObjectsInCollection
 
-// This code deletes every document in the specified collection
-/*
-const collection = 'CHANGE_THIS_TO_COLLECTION_NAME'
-getAllObjectsInCollection(collection)
-  .then(objects => {
-    objects.forEach(object => {
-      const ref = object.ref.id
-      deleteDocument(collection, ref)
-    });
-  })
-*/
+/* This code deletes every document in the specified collection */
+// const collection = 'CHANGE_THIS_TO_COLLECTION_NAME'
+// getAllObjectsInCollection(collection)
+//   .then(objects => {
+//     objects.forEach(object => {
+//       deleteDocument(collection, object.ref.id)
+//     })
+//   })
 
-const collection = 'authentications'
-getAllObjectsInCollection(collection)
-  .then(objects => {
-    objects.forEach(object => {
-      const ref = object.ref.id
-      console.log('\n\nref:',ref)
-    });
-  })
+/* This code deletes every document in all of the specified collections */
+// const collections = ['authentications', 'urls', 'webhookhistory']
+// collections.forEach(collection => {
+//   getAllObjectsInCollection(collection)
+//     .then(objects => {
+//       objects.forEach(object => {
+//         deleteDocument(collection, object.ref.id)
+//       })
+//     })
+// })

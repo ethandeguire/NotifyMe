@@ -14,7 +14,7 @@ export default class Login extends React.Component {
   signin = () => {
 
     // send request
-    fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
+    return fetch('https://notifyme.netlify.com/.netlify/functions/validate-user', {
       method: 'POST',
       headers: { 'username': this.state.email, 'password': this.state.password }
     })

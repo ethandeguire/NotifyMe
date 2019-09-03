@@ -139,7 +139,7 @@ const deleteDocument = (collection, ref) => {
 
 // ----------------- export the functions -----------------
 exports.callbackPackager = callbackPackager
-exports.getAllDBObjectsInCollection = getAllObjectsInCollection
+exports.getAllObjectsInCollection = getAllObjectsInCollection
 exports.getObjectByUsernameAndCollection = getObjectByUsernameAndCollection
 exports.getAllObjectsByUsernameAndCollection = getAllObjectsByUsernameAndCollection
 exports.addAuthenticationByUsername = addAuthenticationByUsername

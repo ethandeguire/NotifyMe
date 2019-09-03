@@ -13,15 +13,26 @@ export default class dashboard extends React.Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('email') !== null && localStorage.getItem('session_token') !== null) {
-      // verify session token
-      this.setState((state) => {
-        return { email: localStorage.getItem('email') }
-      })
-    }
-    else {
-      navigate("/authenticate/")
-    }
+    this.setState(
+
+      // set state to include email and session_token from localStorage
+      { email: localStorage.getItem('email'), session_token: localStorage.getItem('session_token') },
+
+      // callback function after setting state
+      () => {
+        if (this.state.email != null && this.state.session_token != null) {
+          // verify session token
+          return fetch('https://notifyme.netlify.com/.netlify/functions/validate-session-token', {
+            method: 'POST',
+            body: { data: { username: this.state.email, session_token: this.state.session_token } }
+          })
+            .then(res => res.json())
+            .then(json => console.log(json))
+        } else {
+          navigate("/authenticate/")
+        }
+      }
+    )
   }
 
   getEmail() {
