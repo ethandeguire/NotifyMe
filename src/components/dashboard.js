@@ -36,7 +36,8 @@ export default class dashboard extends React.Component {
   }
 
   getEmail() {
-    return localStorage.getItem('email')
+    if (typeof window !== 'undefined') return localStorage.getItem('email')
+    else return 'how are we here please explain gatsby'
   }
 
   render() {
