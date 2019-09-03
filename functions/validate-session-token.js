@@ -21,7 +21,7 @@ exports.handler = (event, context, callback) => {
   getObjectByUsernameAndCollection(username, 'authentications')
     .then((urlObject) => {
 
-      if (urlObject == null) return callbackPackager(callback, 400, { error: "This user is not authenticated" })
+      if (urlObject == null) return callbackPackager(callback, 200, { data: { is_valid: false, message: 'This user does not have any authentications' } })
 
       // find the difference in minutes between now and token creation
       let difMins = Math.round((Date.now() - (urlObject['timestamp'] / 1000)) / 1000 / 60 * 100) / 100
