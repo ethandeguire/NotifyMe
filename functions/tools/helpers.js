@@ -7,7 +7,10 @@ const q = faunadb.query
 const client = new faunadb.Client({ secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9' })
 
 
+
+
 // ----------------- helper functions -----------------
+
 // sends a callback with a status code and the required headers
 const callbackPackager = (callback, statCode, retobj) => {
   return callback(null, {
@@ -126,6 +129,11 @@ const updateDocument = (ref, document) => {
   return client.query(q.Update(ref, document))
 }
 
+// takes in a collection name and ref id and deletes that document
+const deleteDocument = (collection, ref) => {
+  return client.query(q.Delete(q.Ref(q.Collection(collection), ref)))
+}
+
 
 
 
@@ -137,6 +145,8 @@ exports.getAllObjectsByUsernameAndCollection = getAllObjectsByUsernameAndCollect
 exports.addAuthenticationByUsername = addAuthenticationByUsername
 exports.createDocument = createDocument
 exports.updateDocument = updateDocument
+exports.deleteDocument = deleteDocument
+
 
 
 

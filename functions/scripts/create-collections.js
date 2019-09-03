@@ -2,9 +2,7 @@ const faunadb = require('faunadb') // Import faunaDB sdk
 
 // configure faunaDB Client with our secret
 const q = faunadb.query
-const client = new faunadb.Client({
-  secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9'
-})
+const client = new faunadb.Client({ secret: 'fnADVEKXmjACASmqtZzNdLcl3JpIVGzc7Yxzfsk9' })
 
 const collections = ["urls", "authentications", "webhookhistory"]
 let errors = []
@@ -12,14 +10,15 @@ let errors = []
 collections.forEach(collection => {
   console.log("*** Creating collection", collection)
   client.query(q.CreateCollection({ name: collection }))
-    .then((result) => { }) 
-    .catch((err) => { 
-      if (err.message !== 'instance already exists') errors.push({ name: error.name, message: error.message }) 
+    .then((result) => { })
+    .catch((err) => {
+      if (err.message !== 'instance already exists') errors.push({ name: error.name, message: error.message })
     })
 
   client.query(q.CreateIndex({ name: `all_${collection}`, source: q.Collection(collection) }))
     .catch((err) => {
-      if (err.message !== 'instance already exists') errors.push({ name: error.name, message: error.message }) })
+      if (err.message !== 'instance already exists') errors.push({ name: error.name, message: error.message })
+    })
 
 });
 
