@@ -24,10 +24,24 @@ export default class dashboard extends React.Component {
           // verify session token
           return fetch('https://notifyme.netlify.com/.netlify/functions/validate-session-token', {
             method: 'POST',
-            body: { data: { username: this.state.email, session_token: this.state.session_token } }
+            body: JSON.stringify({ data: { username: this.state.email, session_token: this.state.session_token } })
           })
             .then(res => res.json())
-            .then(json => console.log(json))
+            .then(json => {
+              // if the session token is not valid, go back to the authentication page
+              // console.log(json, json['data'])
+              if (json['data']['is_valid']) {
+                console.log('session_token valid, session has', json['data']['mins_left'], 'minutes left')
+              }
+              else {
+                console.log(json['data']['message']);
+                navigate("/authenticate/")
+              }
+              // console.log(json['data']); 
+              // 
+
+            })
+            .catch(err => console.log(err))
         } else {
           navigate("/authenticate/")
         }

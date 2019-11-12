@@ -29,7 +29,10 @@ exports.handler = (event, context, callback) => {
 
   return getObjectByUsernameAndCollection(username, 'urls')
     .then(urlObject => {
+
+      if (!urlObject) return callbackPackager(callback, 400, {error: 'Incorrect URL'})
       const url = urlObject['url']
+      if (!url) return callbackPackager(callback, 400, {error: 'Incorrect URL'})
 
       // remove host header - this is to prevent some cors garbage from disallowing the request
       delete event.headers.host

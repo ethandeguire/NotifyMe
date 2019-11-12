@@ -32,7 +32,7 @@ exports.handler = (event, context, callback) => {
       }
 
       // if its not valid, return that
-      else return callbackPackager(callback, 200, { data: { is_valid: false, message: 'session_token expired or incorrect'} })
+      else return callbackPackager(callback, 200, { data: { is_valid: false, message: 'session_token expired or incorrect' } })
 
     })
     .catch(err => callbackPackager(callback, 500, { error: err }))
