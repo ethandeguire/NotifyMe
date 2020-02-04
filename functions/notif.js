@@ -27,6 +27,10 @@ exports.handler = (event, context, callback) => {
   }
   const username = params["username"]
 
+  console.log('******')
+  console.log(event)
+  console.log('******')
+
   return getObjectByUsernameAndCollection(username, 'urls')
     .then(urlObject => {
 

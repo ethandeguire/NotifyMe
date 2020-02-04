@@ -136,6 +136,12 @@ const deleteDocument = (collection, ref) => {
 
 
 
+// ----------------- helper functions for the helper functions -----------------
+const newSessionToken = () => {
+  return crypto.randomBytes(20).toString('hex')
+}
+
+
 
 // ----------------- export the functions -----------------
 exports.callbackPackager = callbackPackager
@@ -146,11 +152,3 @@ exports.addAuthenticationByUsername = addAuthenticationByUsername
 exports.createDocument = createDocument
 exports.updateDocument = updateDocument
 exports.deleteDocument = deleteDocument
-
-
-
-
-// ----------------- helper functions for the helper functions -----------------
-const newSessionToken = () => {
-  return crypto.randomBytes(20).toString('hex')
-}

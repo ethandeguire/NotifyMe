@@ -1,15 +1,6 @@
-// ------ Definitions ------
-//
-// JSON Return Data:
-//  {
-//    data: {
-//      username: "{username}",
-//      password: "{password}",
-//      url: "url",
-//    }
-//  }
-//
-// ------ /Definitions -----
+// import my functions
+const helpers = require('./tools/helpers')
+const callbackPackager = helpers.callbackPackager
 
 import faunadb from 'faunadb' // Import faunaDB sdk
 
@@ -21,10 +12,13 @@ const client = new faunadb.Client({
 
 // export our lambda function as named "handler" export
 exports.handler = (event, context, callback) => {
+
+  if (event.httpMethod == 'OPTIONS') return callbackPackager(callback, 200, { success: "OPTIONS request" })
+
   let params = event.queryStringParameters
   if (!params["type"]) {
     console.log("'type' query parameter must be included in post request")
-    return callback(null, { statusCode: 400, message: "'type' query parameter must be included in post request" })
+    return callbackPackager(callback, 400, { error: "'type' query parameter must be included in post request" })
   }
 
   let _COLLECTION_NAME = params["type"]
@@ -45,16 +39,10 @@ exports.handler = (event, context, callback) => {
 
       // then query the refs
       return client.query(getAllDataQuery).then((ret) => {
-        return callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(ret)
-        })
+        return callbackPackager(callback, 200, ret)
       })
     }).catch((error) => {
       console.log('--error', error)
-      return callback(null, {
-        statusCode: 400,
-        body: JSON.stringify(error)
-      })
+      return callbackPackager(callback, 400, error)
     })
 }
